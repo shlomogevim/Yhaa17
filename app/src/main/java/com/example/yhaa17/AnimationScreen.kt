@@ -21,6 +21,7 @@ class AnimationScreen : AppCompatActivity() {
         const val TALKER = "talker"
         const val STYLE = "style"
         const val OPERATELIST = "opreratelist"
+        const val TALKINGLIST="talkinglist"
     }
 
     lateinit var talkList: ArrayList<Talker>
@@ -49,14 +50,46 @@ class AnimationScreen : AppCompatActivity() {
         initValues()
         buttonZone()
 
-        //  Page.createBasicStyle()
-
-        updateTalkList()
-
+       /* updateTalkList()
         retrieveData()
+        addStyleValueToTalkingList()
+        saveTalkingList()*/
+
+        retriveTalkingList()
 
         generalOperation()     // Let's play
     }
+
+    private fun addStyleValueToTalkingList() {
+        for (item in talkList){
+            val numStyle=item.styleNum
+            val style=findStyleObject(numStyle)
+            item.colorBack=style.colorBack
+            item.colorText=style.colorText
+            item.paddingButton=style.paddingButton
+            item.paddingTop=style.paddingTop
+            item.paddingLeft=style.paddingLeft
+            item.paddingRight=style.paddingRight
+        }
+
+    }
+
+    private fun findStyleObject(index: Int): StyleObject {
+        var style1 = StyleObject()
+        var bo = true
+        var i = 0
+        while (bo && i < Page.styleArray.size) {
+
+            if (Page.styleArray[i].num == index) {
+                style1 = Page.styleArray[i]
+                bo = false
+            }
+            i++
+        }
+        if (bo) style1 = Page.styleArray[10]
+        return style1
+    }
+
 
     private fun generalOperation() {
 
@@ -71,6 +104,24 @@ class AnimationScreen : AppCompatActivity() {
         updateTitleTalkerSituation()
         animationInAction1.excuteTalker(talker)
 
+    }
+    private fun saveTalkingList(){
+        val gson=Gson()
+        val talkingString=gson.toJson(talkList)
+        editor.putString(TALKINGLIST,talkingString)
+        editor.apply()
+    }
+    private fun retriveTalkingList(){
+        talkList= arrayListOf()
+        val gson=Gson()
+        val jsonString=myPref.getString(TALKINGLIST,null)
+        if (jsonString==null) {
+             updateTalkList()
+
+        }else{
+            val type=object  : TypeToken<ArrayList<Talker>>() {}.type
+             talkList=gson.fromJson(jsonString, type)
+        }
     }
 
     private fun retrieveData() {
@@ -206,6 +257,7 @@ class AnimationScreen : AppCompatActivity() {
                 current_textSize = textSize
             } else {
                 styleNum = current_styleNum
+                trasferSyle()
                 animNum = current_animNum
                 if (current_dur > 100) {
                     dur = current_dur
@@ -221,17 +273,27 @@ class AnimationScreen : AppCompatActivity() {
         }
     }
 
+    private fun trasferSyle() {
 
+        var item=talkList[counterStep]
+        val style=findStyleObject(current_styleNum)
+        item.colorBack=style.colorBack
+        item.colorText=style.colorText
+        item.paddingButton=style.paddingButton
+        item.paddingTop=style.paddingTop
+        item.paddingLeft=style.paddingLeft
+        item.paddingRight=style.paddingRight
+    }
 
 
     private fun buttonZone() {
-        animView.setOnItemClickListener { parent, view, position, id ->
+        animView.setOnItemClickListener { _, _, position, _ ->
             current_styleNum = animList[position].toInt()
             updateTitleTalkerSituation()
             tranferValue(1)
             generalOperation()
         }
-        actioAnimLv.setOnItemClickListener { parent, view, position, id ->
+        actioAnimLv.setOnItemClickListener { _, _, position, _ ->
             current_animNum = actionAnimList[position].toInt()
             updateTitleTalkerSituation()
             tranferValue(1)

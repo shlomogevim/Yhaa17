@@ -209,41 +209,23 @@ class AnimationAction(val context: Context, val view: View) {
     }
 
     private fun styleTextViewTalk1(tv: TextView, st: String, talker: Talker): TextView {
-        val num = talker.styleNum
-        val textSize = talker.textSize
+
         var textView = tv
-        val style = findStyleObject(num)
-        with(style) {
-
-            var shape = GradientDrawable()
-            shape.cornerRadius = 50f
-
+        var shape = GradientDrawable()
+        shape.cornerRadius = 50f
+        with(talker) {
             if (colorBack == "none") {
-                //  textView.setBackgroundResource(android.R.color.transparent)
                 shape.setColor(Color.parseColor(android.R.color.transparent.toString()))
-
             } else {
                 try {
-
-                    // textView.setBackgroundColor(android.graphics.Color.parseColor(colorBack))
                     shape.setColor(Color.parseColor(colorBack))
-
                 } catch (e: Exception) {
                     shape.setColor(Color.parseColor(android.R.color.transparent.toString()))
                 }
             }
-             try {
-                textView.setTextColor(Color.parseColor(colorText))
-            } catch (e: Exception) {
-                textView.setTextColor(Color.BLACK)
-            }
             textView.setBackgroundDrawable(shape)
-
             textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
             textView.typeface = helper.getTypeFace(1)
-
-
-            var stam = textView.typeface
             textView.setPadding(paddingLeft, paddingTop, paddingRight, paddingButton)
             textView.text = st
         }
