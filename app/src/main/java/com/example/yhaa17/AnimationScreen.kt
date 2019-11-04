@@ -1,6 +1,5 @@
 package com.example.yhaa17
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -9,38 +8,22 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_animation_screen.*
-
 import kotlinx.android.synthetic.main.current_position_layout1.*
 import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
 
 
 class AnimationScreen : AppCompatActivity() {
-
-
     companion object {
-       // const val CURRENT_NUM=11
-        const val TALKER = "talker"
-        const val STYLE = "style"
-        const val OPERATELIST = "opreratelist"
-       // const val TALKINGLIST="talkinglist"
-        const val FILE_NUM="file_num"
+        const val FILE_NUM = "file_num"
     }
 
-
-
     lateinit var talkList: ArrayList<Talker>
-    lateinit var operateList: ArrayList<List<Int>>
 
-    var currentFileNum=10
-    var STORELIST="storelist"
+    var currentFileNum = 10
+    var STORELIST = "storelist"
 
-    lateinit var sharData:ShareData
+    lateinit var sharData: ShareData
 
 
     var current_styleNum = 10
@@ -64,22 +47,12 @@ class AnimationScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_animation_screen)
 
-       /* currentFileNum = intent.getIntExtra(FILE_NUM, 0)
-        STORELIST= STORELIST+currentFileNum.toString()
-        sharData=ShareData(STORELIST)*/
-
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
-        sharData=ShareData(this,currentFileNum)
-        talkList=sharData.getTalkingList()
+        sharData = ShareData(this, currentFileNum)
+        talkList = sharData.getTalkingList()
 
         initValues()
         buttonZone()
-
-       /* updateTalkList()
-        retrieveData()
-        addStyleValueToTalkingList()
-        saveTalkingList()*/
-        //retriveTalkingList()
 
         generalOperation()     // Let's play
     }
@@ -99,12 +72,7 @@ class AnimationScreen : AppCompatActivity() {
 
     }
 
-    private fun saveData() {
-        val gson = Gson()
-        val jsonString = gson.toJson(operateList)
-        editor.putString(OPERATELIST, jsonString)
-        editor.apply()
-    }
+
     private fun initValues() {
 
         myPref = getSharedPreferences(PREFS_NAME, 0)
@@ -112,15 +80,8 @@ class AnimationScreen : AppCompatActivity() {
         counterStep = myPref.getInt(CURRENT_SPEAKER, 1)
         animationInAction1 = AnimationAction(this, mainLayout)
         manipulateListView()
-/*
-        @Suppress("UNCHECKED_CAST")
-        talkList = intent.getSerializableExtra(TALKER) as ArrayList<Talker>
-        @Suppress("UNCHECKED_CAST")
-        operateList = intent.getSerializableExtra(STYLE) as ArrayList<List<Int>>*/
-
-
-
     }
+
     private fun findStyleObject(index: Int): StyleObject {
         var style1 = StyleObject()
         var bo = true
@@ -136,49 +97,6 @@ class AnimationScreen : AppCompatActivity() {
         if (bo) style1 = Page.styleArray[10]
         return style1
     }
-    private fun addStyleValueToTalkingList() {
-        for (item in talkList){
-            val numStyle=item.styleNum
-            val style=findStyleObject(numStyle)
-            item.colorBack=style.colorBack
-            item.colorText=style.colorText
-            item.paddingButton=style.paddingButton
-            item.paddingTop=style.paddingTop
-            item.paddingLeft=style.paddingLeft
-            item.paddingRight=style.paddingRight
-        }
-
-    }
-    private fun saveTalkingList(){
-        val gson=Gson()
-        val talkingString=gson.toJson(talkList)
-        editor.putString(STORELIST,talkingString)
-        editor.apply()
-    }
-    private fun retriveTalkingList(){
-        talkList= arrayListOf()
-        val gson=Gson()
-        val jsonString=myPref.getString(STORELIST,null)
-        if (jsonString==null) {
-            updateTalkList()
-
-        }else{
-            val type=object  : TypeToken<ArrayList<Talker>>() {}.type
-            talkList=gson.fromJson(jsonString, type)
-        }
-    }
-
-    private fun retrieveData() {
-        operateList.clear()
-        val gson = Gson()
-        val jsonString = myPref.getString(OPERATELIST, null)
-        if (jsonString == null) {
-            saveData()
-        } else {
-            val type = object : TypeToken<ArrayList<List<Int>>>() {}.type
-            operateList = gson.fromJson(jsonString, type)
-        }
-    }
 
     private fun manipulateListView() {
         Page.createBasicStyle()
@@ -193,18 +111,20 @@ class AnimationScreen : AppCompatActivity() {
             animList.add("1000")
         }
         val adapter0 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, animList)
-        animView.adapter =adapter0
+        animView.adapter = adapter0
 
         for (i in 0..15) {
             actionAnimList.add("1")
         }
-        val list = arrayListOf("4",
-            "10","11","12","13","14","15",
-            "20","21","22","23","24","25",
-            "30","31","32","33","34","35",
-            "40","41","42","43","44","45","46",
-            "50","51","52","53","54","55","506",
-            "60","61","62","63","64","65")
+        val list = arrayListOf(
+            "4",
+            "10", "11", "12", "13", "14", "15",
+            "20", "21", "22", "23", "24", "25",
+            "30", "31", "32", "33", "34", "35",
+            "40", "41", "42", "43", "44", "45", "46",
+            "50", "51", "52", "53", "54", "55", "506",
+            "60", "61", "62", "63", "64", "65"
+        )
         actionAnimList.addAll(list)
         for (i in 0..15) {
             actionAnimList.add("1000")
@@ -218,43 +138,13 @@ class AnimationScreen : AppCompatActivity() {
 
     private fun trySomething() {
 
-        animView.smoothScrollToPosition(25)
-
-
+        talkList[counterStep].colorText = "#000000"
+        talkList[counterStep].colorBack = "#ffffff"
+        talkList[counterStep].animNum = 20
+        talkList[counterStep].styleNum = 10
+        tranferValue(0)
     }
 
-    fun enterDefaltValueToTalkList(ind: Int, talker: Talker): Talker {
-        if (ind < operateList.size) {
-            val item = operateList[ind]
-            talker.styleNum = item[0]
-            talker.animNum = item[1]
-            talker.dur = item[2].toLong()
-            talker.textSize = item[3].toFloat()
-        } else {
-            if (talker.whoSpeake == "man") {
-                talker.styleNum = 210
-                talker.animNum = 3
-                talker.dur = 2000L
-                talker.textSize = 28f
-            }
-            if (talker.whoSpeake == "god") {
-                talker.styleNum = 200
-                talker.animNum = 2
-                talker.dur = 2000L
-                talker.textSize = 48f
-            }
-        }
-        return talker
-    }
-
-
-    private fun updateTalkList() {
-        //   operateList = FileStyling.initFileText11()
-        for (ind in 1 until talkList.size) {
-            talkList[ind] = enterDefaltValueToTalkList(ind, talkList[ind])
-        }
-    }
-// the idea is to isolate the text item from the style item for ease to correct them
 
     private fun updateTitleTalkerSituation() {
         val talker = talkList[counterStep]
@@ -278,53 +168,59 @@ class AnimationScreen : AppCompatActivity() {
                 current_textSize = textSize
             } else {
                 styleNum = current_styleNum
-                trasferSyle()
+                trasferStyle()
                 animNum = current_animNum
                 if (current_dur > 100) {
                     dur = current_dur
-                }else {
+                } else {
                     current_dur = 100
                 }
-                if (current_textSize>10) {
+                if (current_textSize > 10) {
                     textSize = current_textSize
-                }else{
-                    current_textSize=10f
+                } else {
+                    current_textSize = 10f
                 }
             }
         }
+        updateTitleTalkerSituation()
     }
 
-    private fun trasferSyle() {
+    private fun trasferStyle() {
 
-        var item=talkList[counterStep]
-        val style=findStyleObject(current_styleNum)
-        item.colorBack=style.colorBack
-        item.colorText=style.colorText
-        item.paddingButton=style.paddingButton
-        item.paddingTop=style.paddingTop
-        item.paddingLeft=style.paddingLeft
-        item.paddingRight=style.paddingRight
+        var item = talkList[counterStep]
+        val style = findStyleObject(current_styleNum)
+        item.styleNum = current_styleNum
+        item.colorBack = style.colorBack
+        item.colorText = style.colorText
+        item.paddingButton = style.paddingButton
+        item.paddingTop = style.paddingTop
+        item.paddingLeft = style.paddingLeft
+        item.paddingRight = style.paddingRight
     }
-
 
     private fun buttonZone() {
         animView.setOnItemClickListener { _, _, position, _ ->
             current_styleNum = animList[position].toInt()
+            trasferStyle()
             updateTitleTalkerSituation()
             tranferValue(1)
             generalOperation()
         }
+
         actioAnimLv.setOnItemClickListener { _, _, position, _ ->
             current_animNum = actionAnimList[position].toInt()
+            talkList[counterStep].animNum=current_animNum
             updateTitleTalkerSituation()
-            tranferValue(1)
             generalOperation()
         }
+
         saveButton.setOnClickListener {
-            tranferValue(1)
+            tranferValue(0)
             editor.putInt(CURRENT_SPEAKER, counterStep)
             editor.commit()
             updateTitleTalkerSituation()
+            sharData.saveData(talkList)
+
         }
         nextButton.setOnClickListener {
             counterStep++
@@ -348,6 +244,7 @@ class AnimationScreen : AppCompatActivity() {
         }
 
         btnTry.setOnClickListener {
+
             trySomething()
         }
 
@@ -440,14 +337,79 @@ class AnimationScreen : AppCompatActivity() {
 
     }
 
+    private fun addStyleValueToTalkingList() {
+        for (item in talkList) {
+            val numStyle = item.styleNum
+            val style = findStyleObject(numStyle)
+            item.colorBack = style.colorBack
+            item.colorText = style.colorText
+            item.paddingButton = style.paddingButton
+            item.paddingTop = style.paddingTop
+            item.paddingLeft = style.paddingLeft
+            item.paddingRight = style.paddingRight
+        }
 
+    }
 
+    private fun saveTalkingList() {
+        val gson = Gson()
+        val talkingString = gson.toJson(talkList)
+        editor.putString(STORELIST, talkingString)
+        editor.apply()
+    }
+
+    private fun retriveTalkingList() {
+        talkList = arrayListOf()
+        val gson = Gson()
+        val jsonString = myPref.getString(STORELIST, null)
+        if (jsonString == null) {
+            updateTalkList()
+
+        } else {
+            val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            talkList = gson.fromJson(jsonString, type)
+        }
+    }
+
+    private fun updateTalkList() {
+        //   operateList = FileStyling.initFileText11()
+        for (ind in 1 until talkList.size) {
+            talkList[ind] = enterDefaltValueToTalkList(ind, talkList[ind])
+        }
+    }
+
+    fun enterDefaltValueToTalkList(ind: Int, talker: Talker): Talker {
+
+        if (talker.whoSpeake == "man") {
+            talker.styleNum = 10
+            talker.animNum = 20
+            talker.dur = 2000L
+            talker.textSize = 28f
+        }
+        if (talker.whoSpeake == "god") {
+            talker.styleNum = 10
+            talker.animNum = 20
+            talker.dur = 2000L
+            talker.textSize = 28f
+        }
+        return talker
+
+    }
 
 }
 
 
-
-
+/* private fun retrieveData() {
+       operateList.clear()
+       val gson = Gson()
+       val jsonString = myPref.getString(OPERATELIST, null)
+       if (jsonString == null) {
+           saveData()
+       } else {
+           val type = object : TypeToken<ArrayList<List<Int>>>() {}.type
+           operateList = gson.fromJson(jsonString, type)
+       }
+   }*/
 
 
 

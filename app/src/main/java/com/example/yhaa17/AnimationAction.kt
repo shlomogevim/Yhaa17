@@ -9,6 +9,11 @@ import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.god_layout.view.*
 import kotlinx.android.synthetic.main.man_layout.view.*
 import java.util.*
+import android.R
+import androidx.core.content.ContextCompat
+import android.graphics.drawable.ColorDrawable
+
+
 
 class AnimationAction(val context: Context, val view: View) {
 
@@ -212,7 +217,7 @@ class AnimationAction(val context: Context, val view: View) {
 
         var textView = tv
         var shape = GradientDrawable()
-        shape.cornerRadius = 50f
+//        shape.cornerRadius = 50f
         with(talker) {
             if (colorBack == "none") {
                 shape.setColor(Color.parseColor("#00ff0000"))  //00 its all trans
@@ -220,10 +225,18 @@ class AnimationAction(val context: Context, val view: View) {
                 try {
                     shape.setColor(Color.parseColor(colorBack))
                 } catch (e: Exception) {
-                    shape.setColor(Color.parseColor("#00ff0000"))
+                    shape.setColor(Color.parseColor("#000000"))
                 }
             }
+
             textView.setBackgroundDrawable(shape)
+
+            try {
+                textView.setTextColor(Color.parseColor(colorText))
+            } catch (e: Exception) {
+                shape.setColor(Color.parseColor("#ffffff"))
+            }
+
             textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
             textView.typeface = helper.getTypeFace(1)
             textView.setPadding(paddingLeft, paddingTop, paddingRight, paddingButton)

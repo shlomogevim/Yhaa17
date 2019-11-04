@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.yhaa17.AnimationScreen.Companion.FILE_NUM
-import com.example.yhaa17.AnimationScreen.Companion.STYLE
-import com.example.yhaa17.AnimationScreen.Companion.TALKER
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val intent=Intent(this,AnimationScreen::class.java)
 
         intent.putExtra(FILE_NUM,CURRENT_NUM)

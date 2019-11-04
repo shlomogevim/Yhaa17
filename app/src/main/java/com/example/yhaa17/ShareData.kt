@@ -41,7 +41,7 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         }
         return talkList1
     }
-    private fun saveData(talkingList:ArrayList<Talker>) {
+    fun saveData(talkingList:ArrayList<Talker>) {
         val gson = Gson()
         val jsonString = gson.toJson(talkingList)
         editor.putString(TALKLIST, jsonString)
@@ -85,7 +85,11 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
                         }
                     }
                     lines = takingArray.size
+                    colorText="#000000"
+                    colorBack="#ffffff"
+                    animNum=10
                 }
+
                 talkList1.add(talker)
 
                 countItem++
@@ -101,6 +105,9 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
                         }
                     }
                     talker.lines = takingArray.size
+                    colorText="#000000"
+                    colorBack="#ffffff"
+                    animNum=10
                 }
                 talkList1.add(talker)
             }
