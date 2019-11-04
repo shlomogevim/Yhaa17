@@ -3,32 +3,42 @@ package com.example.yhaa17
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.yhaa17.AnimationScreen.Companion.CURRENT_NUM
+import com.example.yhaa17.AnimationScreen.Companion.FILE_NUM
 import com.example.yhaa17.AnimationScreen.Companion.STYLE
 import com.example.yhaa17.AnimationScreen.Companion.TALKER
 
 class MainActivity : AppCompatActivity() {
 
 
-   // val CURRENT_FILE = "text/text11.txt"
-    val CURRENT_FILE = "text/text"+CURRENT_NUM+".txt"
+    val CURRENT_NUM=11
+
+
+   /* val CURRENT_FILE = "text/text"+CURRENT_NUM+".txt"
     val STYLE_FILE = "style/style11.txt"
     val ADAM = "-אדם-"
     val GOD = "-אלוהים-"
-
     lateinit var talkerList: ArrayList<Talker>
-    var operateList = arrayListOf<List<Int>>()
+    var operateList = arrayListOf<List<Int>>()*/
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        createTalkList()
+        val intent=Intent(this,AnimationScreen::class.java)
+
+        intent.putExtra(FILE_NUM,CURRENT_NUM)
+        startActivity(intent)
+
+
+
+
+
+       /* createTalkList()
         getStyleData()
-        sendData()
+        sendData()*/
     }
 
-    private fun sendData() {
+   /* private fun sendData() {
         val intent = Intent(this, AnimationScreen::class.java)
 
         intent.putExtra(TALKER, talkerList)
@@ -126,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
-
+*/
 }
 
 

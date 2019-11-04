@@ -215,12 +215,12 @@ class AnimationAction(val context: Context, val view: View) {
         shape.cornerRadius = 50f
         with(talker) {
             if (colorBack == "none") {
-                shape.setColor(Color.parseColor(android.R.color.transparent.toString()))
+                shape.setColor(Color.parseColor("#00ff0000"))  //00 its all trans
             } else {
                 try {
                     shape.setColor(Color.parseColor(colorBack))
                 } catch (e: Exception) {
-                    shape.setColor(Color.parseColor(android.R.color.transparent.toString()))
+                    shape.setColor(Color.parseColor("#00ff0000"))
                 }
             }
             textView.setBackgroundDrawable(shape)

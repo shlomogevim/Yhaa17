@@ -1,5 +1,6 @@
 package com.example.yhaa17
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -12,21 +13,35 @@ import kotlinx.android.synthetic.main.activity_animation_screen.*
 import kotlinx.android.synthetic.main.current_position_layout1.*
 import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class AnimationScreen : AppCompatActivity() {
 
 
     companion object {
-        const val CURRENT_NUM=11
+       // const val CURRENT_NUM=11
         const val TALKER = "talker"
         const val STYLE = "style"
         const val OPERATELIST = "opreratelist"
-        const val TALKINGLIST="talkinglist"+ CURRENT_NUM
+       // const val TALKINGLIST="talkinglist"
+        const val FILE_NUM="file_num"
     }
+
+
 
     lateinit var talkList: ArrayList<Talker>
     lateinit var operateList: ArrayList<List<Int>>
+
+    var currentFileNum=10
+    var STORELIST="storelist"
+
+    lateinit var sharData:ShareData
+
 
     var current_styleNum = 10
     var current_animNum = 10
@@ -48,6 +63,15 @@ class AnimationScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_animation_screen)
+
+       /* currentFileNum = intent.getIntExtra(FILE_NUM, 0)
+        STORELIST= STORELIST+currentFileNum.toString()
+        sharData=ShareData(STORELIST)*/
+
+        currentFileNum = intent.getIntExtra(FILE_NUM, 0)
+        sharData=ShareData(this,currentFileNum)
+        talkList=sharData.getTalkingList()
+
         initValues()
         buttonZone()
 
@@ -55,42 +79,10 @@ class AnimationScreen : AppCompatActivity() {
         retrieveData()
         addStyleValueToTalkingList()
         saveTalkingList()*/
-
-        retriveTalkingList()
+        //retriveTalkingList()
 
         generalOperation()     // Let's play
     }
-
-    private fun addStyleValueToTalkingList() {
-        for (item in talkList){
-            val numStyle=item.styleNum
-            val style=findStyleObject(numStyle)
-            item.colorBack=style.colorBack
-            item.colorText=style.colorText
-            item.paddingButton=style.paddingButton
-            item.paddingTop=style.paddingTop
-            item.paddingLeft=style.paddingLeft
-            item.paddingRight=style.paddingRight
-        }
-
-    }
-
-    private fun findStyleObject(index: Int): StyleObject {
-        var style1 = StyleObject()
-        var bo = true
-        var i = 0
-        while (bo && i < Page.styleArray.size) {
-
-            if (Page.styleArray[i].num == index) {
-                style1 = Page.styleArray[i]
-                bo = false
-            }
-            i++
-        }
-        if (bo) style1 = Page.styleArray[10]
-        return style1
-    }
-
 
     private fun generalOperation() {
 
@@ -106,36 +98,6 @@ class AnimationScreen : AppCompatActivity() {
         animationInAction1.excuteTalker(talker)
 
     }
-    private fun saveTalkingList(){
-        val gson=Gson()
-        val talkingString=gson.toJson(talkList)
-        editor.putString(TALKINGLIST,talkingString)
-        editor.apply()
-    }
-    private fun retriveTalkingList(){
-        talkList= arrayListOf()
-        val gson=Gson()
-        val jsonString=myPref.getString(TALKINGLIST,null)
-        if (jsonString==null) {
-             updateTalkList()
-
-        }else{
-            val type=object  : TypeToken<ArrayList<Talker>>() {}.type
-             talkList=gson.fromJson(jsonString, type)
-        }
-    }
-
-    private fun retrieveData() {
-        operateList.clear()
-        val gson = Gson()
-        val jsonString = myPref.getString(OPERATELIST, null)
-        if (jsonString == null) {
-            saveData()
-        } else {
-            val type = object : TypeToken<ArrayList<List<Int>>>() {}.type
-            operateList = gson.fromJson(jsonString, type)
-        }
-    }
 
     private fun saveData() {
         val gson = Gson()
@@ -149,15 +111,73 @@ class AnimationScreen : AppCompatActivity() {
         editor = myPref.edit()
         counterStep = myPref.getInt(CURRENT_SPEAKER, 1)
         animationInAction1 = AnimationAction(this, mainLayout)
-
-
+        manipulateListView()
+/*
         @Suppress("UNCHECKED_CAST")
         talkList = intent.getSerializableExtra(TALKER) as ArrayList<Talker>
         @Suppress("UNCHECKED_CAST")
-        operateList = intent.getSerializableExtra(STYLE) as ArrayList<List<Int>>
-        manipulateListView()
+        operateList = intent.getSerializableExtra(STYLE) as ArrayList<List<Int>>*/
 
 
+
+    }
+    private fun findStyleObject(index: Int): StyleObject {
+        var style1 = StyleObject()
+        var bo = true
+        var i = 0
+        while (bo && i < Page.styleArray.size) {
+
+            if (Page.styleArray[i].num == index) {
+                style1 = Page.styleArray[i]
+                bo = false
+            }
+            i++
+        }
+        if (bo) style1 = Page.styleArray[10]
+        return style1
+    }
+    private fun addStyleValueToTalkingList() {
+        for (item in talkList){
+            val numStyle=item.styleNum
+            val style=findStyleObject(numStyle)
+            item.colorBack=style.colorBack
+            item.colorText=style.colorText
+            item.paddingButton=style.paddingButton
+            item.paddingTop=style.paddingTop
+            item.paddingLeft=style.paddingLeft
+            item.paddingRight=style.paddingRight
+        }
+
+    }
+    private fun saveTalkingList(){
+        val gson=Gson()
+        val talkingString=gson.toJson(talkList)
+        editor.putString(STORELIST,talkingString)
+        editor.apply()
+    }
+    private fun retriveTalkingList(){
+        talkList= arrayListOf()
+        val gson=Gson()
+        val jsonString=myPref.getString(STORELIST,null)
+        if (jsonString==null) {
+            updateTalkList()
+
+        }else{
+            val type=object  : TypeToken<ArrayList<Talker>>() {}.type
+            talkList=gson.fromJson(jsonString, type)
+        }
+    }
+
+    private fun retrieveData() {
+        operateList.clear()
+        val gson = Gson()
+        val jsonString = myPref.getString(OPERATELIST, null)
+        if (jsonString == null) {
+            saveData()
+        } else {
+            val type = object : TypeToken<ArrayList<List<Int>>>() {}.type
+            operateList = gson.fromJson(jsonString, type)
+        }
     }
 
     private fun manipulateListView() {
