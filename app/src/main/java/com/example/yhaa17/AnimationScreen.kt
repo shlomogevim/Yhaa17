@@ -18,10 +18,11 @@ class AnimationScreen : AppCompatActivity() {
 
 
     companion object {
+        const val CURRENT_NUM=11
         const val TALKER = "talker"
         const val STYLE = "style"
         const val OPERATELIST = "opreratelist"
-        const val TALKINGLIST="talkinglist"
+        const val TALKINGLIST="talkinglist"+ CURRENT_NUM
     }
 
     lateinit var talkList: ArrayList<Talker>
@@ -38,7 +39,7 @@ class AnimationScreen : AppCompatActivity() {
     lateinit var animationInAction1: AnimationAction
 
     val PREFS_NAME = "myPrefs"
-    val CURRENT_SPEAKER = "currentSpeakertext10"
+    val CURRENT_SPEAKER = "stam_speaker"
     lateinit var myPref: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
     var animList = arrayListOf<String>()

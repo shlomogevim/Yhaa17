@@ -3,12 +3,15 @@ package com.example.yhaa17
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.yhaa17.AnimationScreen.Companion.CURRENT_NUM
 import com.example.yhaa17.AnimationScreen.Companion.STYLE
 import com.example.yhaa17.AnimationScreen.Companion.TALKER
 
 class MainActivity : AppCompatActivity() {
 
-    val CURRENT_FILE = "text/text11.txt"
+
+   // val CURRENT_FILE = "text/text11.txt"
+    val CURRENT_FILE = "text/text"+CURRENT_NUM+".txt"
     val STYLE_FILE = "style/style11.txt"
     val ADAM = "-אדם-"
     val GOD = "-אלוהים-"
