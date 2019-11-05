@@ -27,11 +27,12 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
     }
 
 
-    fun getTalkingList(): ArrayList<Talker> {
+    fun getTalkingList(ind:Int): ArrayList<Talker> {
         var talkList1: ArrayList<Talker>
         val gson = Gson()
         val jsonString = myPref.getString(TALKLIST, null)
-        if (jsonString == null) {
+
+        if (ind==0 || jsonString == null) {
             talkList1=createTalkListFromTheStart()
             saveData(talkList1)
 

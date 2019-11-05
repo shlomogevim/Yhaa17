@@ -11,6 +11,7 @@ class Talker(
     var dur: Long = 1000,
     var textSize: Float = 28f,
     var colorBack: String = "none",
+    var backExist:Boolean=true,
     var colorText: String = "#ffffff",
     var num: Int = 0,
     var lines: Int = 1,

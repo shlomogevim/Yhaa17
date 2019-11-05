@@ -9,10 +9,6 @@ import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.god_layout.view.*
 import kotlinx.android.synthetic.main.man_layout.view.*
 import java.util.*
-import android.R
-import androidx.core.content.ContextCompat
-import android.graphics.drawable.ColorDrawable
-
 
 
 class AnimationAction(val context: Context, val view: View) {
@@ -132,6 +128,43 @@ class AnimationAction(val context: Context, val view: View) {
 
     }
 
+    private fun styleTextViewTalk1(tv: TextView, st: String, talker: Talker): TextView {
+
+
+        val shape = GradientDrawable()
+        shape.setCornerRadius(60f)
+
+        with(talker) {
+            if (colorBack == "none" || !backExist) {
+                shape.setColor(Color.parseColor("#00ff0000"))  //00 its all trans
+            } else {
+                try {
+                    shape.setColor(Color.parseColor(colorBack))
+                } catch (e: Exception) {
+                    shape.setColor(Color.parseColor("#000000"))
+                }
+            }
+            tv.background = shape
+
+            try {
+                tv.setTextColor(Color.parseColor(colorText))
+            } catch (e: Exception) {
+                tv.setTextColor(Color.parseColor("#ffffff"))
+            }
+
+            var t = textSize
+
+            tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
+            tv.typeface = helper.getTypeFace(1)
+            tv.setPadding(paddingLeft, paddingTop, paddingRight, paddingButton)
+            tv.text = st
+        }
+        return tv
+    }
+
+
+
+
     private fun configGodTextView1(talker: Talker) {
         initTextview()
         initGodTextview(1)
@@ -213,37 +246,6 @@ class AnimationAction(val context: Context, val view: View) {
         return style1
     }
 
-    private fun styleTextViewTalk1(tv: TextView, st: String, talker: Talker): TextView {
-
-        var textView = tv
-        var shape = GradientDrawable()
-//        shape.cornerRadius = 50f
-        with(talker) {
-            if (colorBack == "none") {
-                shape.setColor(Color.parseColor("#00ff0000"))  //00 its all trans
-            } else {
-                try {
-                    shape.setColor(Color.parseColor(colorBack))
-                } catch (e: Exception) {
-                    shape.setColor(Color.parseColor("#000000"))
-                }
-            }
-
-            textView.setBackgroundDrawable(shape)
-
-            try {
-                textView.setTextColor(Color.parseColor(colorText))
-            } catch (e: Exception) {
-                shape.setColor(Color.parseColor("#ffffff"))
-            }
-
-            textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
-            textView.typeface = helper.getTypeFace(1)
-            textView.setPadding(paddingLeft, paddingTop, paddingRight, paddingButton)
-            textView.text = st
-        }
-        return textView
-    }
 
     private fun initGodTextview(dur: Long) {
         ViewAnimator

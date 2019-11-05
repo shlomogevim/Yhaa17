@@ -49,7 +49,7 @@ class AnimationScreen : AppCompatActivity() {
 
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
         sharData = ShareData(this, currentFileNum)
-        talkList = sharData.getTalkingList()
+        talkList = sharData.getTalkingList(1)
 
         initValues()
         buttonZone()
@@ -61,14 +61,13 @@ class AnimationScreen : AppCompatActivity() {
 
         if (counterStep < 1) counterStep = 1
 
-        counterStep = 1           //*********************
+        //  counterStep = 1           //*********************
 
         manMode = counterStep % 2 != 0
 
-        val talker = talkList[counterStep]
         tranferValue(0)
         updateTitleTalkerSituation()
-        animationInAction1.excuteTalker(talker)
+        animationInAction1.excuteTalker(talkList[counterStep])
 
     }
 
@@ -103,6 +102,7 @@ class AnimationScreen : AppCompatActivity() {
         for (i in 0..15) {
             animList.add("1")
         }
+        animList.add("NB")
         for (item in Page.styleArray) {
             val st = item.num.toString()
             animList.add(st)
@@ -147,8 +147,7 @@ class AnimationScreen : AppCompatActivity() {
 
 
     private fun updateTitleTalkerSituation() {
-        val talker = talkList[counterStep]
-        with(talker) {
+        with(talkList[counterStep]) {
             val text =
                 "line->$lines style->$styleNum anim->$animNum size->$textSize dur->$dur $whoSpeake"
             tvAnimatinKind.text = text
@@ -160,6 +159,8 @@ class AnimationScreen : AppCompatActivity() {
     }
 
     private fun tranferValue(ind: Int) {
+
+
         with(talkList[counterStep]) {
             if (ind == 0) {
                 current_styleNum = styleNum
@@ -188,8 +189,7 @@ class AnimationScreen : AppCompatActivity() {
     private fun trasferStyle() {
 
         var item = talkList[counterStep]
-        val style = findStyleObject(current_styleNum)
-        item.styleNum = current_styleNum
+        val style = findStyleObject(item.animNum)
         item.colorBack = style.colorBack
         item.colorText = style.colorText
         item.paddingButton = style.paddingButton
@@ -200,16 +200,19 @@ class AnimationScreen : AppCompatActivity() {
 
     private fun buttonZone() {
         animView.setOnItemClickListener { _, _, position, _ ->
-            current_styleNum = animList[position].toInt()
-            trasferStyle()
+            if (position == 16) {
+                talkList[counterStep].backExist = false
+            } else {
+                talkList[counterStep].backExist = true
+                talkList[counterStep].animNum = animList[position].toInt()
+                trasferStyle()
+            }
             updateTitleTalkerSituation()
-            tranferValue(1)
             generalOperation()
         }
 
         actioAnimLv.setOnItemClickListener { _, _, position, _ ->
-            current_animNum = actionAnimList[position].toInt()
-            talkList[counterStep].animNum=current_animNum
+            talkList[counterStep].animNum = actionAnimList[position].toInt()
             updateTitleTalkerSituation()
             generalOperation()
         }
@@ -250,66 +253,56 @@ class AnimationScreen : AppCompatActivity() {
 
 
         butTP1.setOnClickListener {
-            current_textSize = current_textSize + 1
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].textSize = talkList[counterStep].textSize + 1
+            chkTalker()
         }
 
         butTP5.setOnClickListener {
-            current_textSize = current_textSize + 5
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].textSize = talkList[counterStep].textSize + 5
+            chkTalker()
         }
         butTP20.setOnClickListener {
-            current_textSize = current_textSize + 20
-            tranferValue(1)
-            generalOperation()
-        }
-        butTM1.setOnClickListener {
-            current_textSize = current_textSize - 1
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].textSize = talkList[counterStep].textSize + 20
+            chkTalker()
         }
 
+        butTM1.setOnClickListener {
+            talkList[counterStep].textSize = talkList[counterStep].textSize - 1
+            chkTalker()
+        }
+
+
         butTM5.setOnClickListener {
-            current_textSize = current_textSize - 5
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].textSize = talkList[counterStep].textSize - 5
+            chkTalker()
         }
         butTM20.setOnClickListener {
-            current_textSize = current_textSize - 20
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].textSize = talkList[counterStep].textSize - 20
+            chkTalker()
         }
         butDP100.setOnClickListener {
-            current_dur = current_dur + 100
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].dur = talkList[counterStep].dur + 100
+            chkTalker()
         }
         butDP500.setOnClickListener {
-            current_dur = current_dur + 500
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].dur = talkList[counterStep].dur + 500
+            chkTalker()
         }
         butDP1000.setOnClickListener {
-            current_dur = current_dur + 1000
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].dur = talkList[counterStep].dur + 1000
+            chkTalker()
         }
         butDM100.setOnClickListener {
-            current_dur = current_dur - 100
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].dur = talkList[counterStep].dur - 100
+            chkTalker()
         }
         butDM500.setOnClickListener {
-            current_dur = current_dur - 500
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].dur = talkList[counterStep].dur - 500
+            chkTalker()
         }
         butDM1000.setOnClickListener {
-            current_dur = current_dur - 1000
-            tranferValue(1)
-            generalOperation()
+            talkList[counterStep].dur = talkList[counterStep].dur - 1000
+            chkTalker()
         }
         goddy.setOnClickListener {
             if (manMode) {
@@ -334,6 +327,23 @@ class AnimationScreen : AppCompatActivity() {
              editor.putInt(CURRENT_SPEAKER, counterStep)
              editor.commit()*/
         }
+
+    }
+
+    private fun chkTalker() {
+
+        var bo=true
+        if (talkList[counterStep].textSize < 3) {
+            talkList[counterStep].textSize = 3f
+            Toast.makeText(this, "Text Size too small", Toast.LENGTH_SHORT).show()
+            bo=false
+        }
+        if (talkList[counterStep].dur < 100) {
+            talkList[counterStep].textSize = 100f
+            Toast.makeText(this, "Duration too small", Toast.LENGTH_SHORT).show()
+            bo=false
+        }
+           if (bo) generalOperation()
 
     }
 
@@ -374,11 +384,11 @@ class AnimationScreen : AppCompatActivity() {
     private fun updateTalkList() {
         //   operateList = FileStyling.initFileText11()
         for (ind in 1 until talkList.size) {
-            talkList[ind] = enterDefaltValueToTalkList(ind, talkList[ind])
+            talkList[ind] = enterDefaltValueToTalkList(talkList[ind])
         }
     }
 
-    fun enterDefaltValueToTalkList(ind: Int, talker: Talker): Talker {
+    fun enterDefaltValueToTalkList(talker: Talker): Talker {
 
         if (talker.whoSpeake == "man") {
             talker.styleNum = 10

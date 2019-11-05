@@ -8,7 +8,7 @@ import com.example.yhaa17.AnimationScreen.Companion.FILE_NUM
 class MainActivity : AppCompatActivity() {
 
 
-    val CURRENT_NUM=11
+    val CURRENT_NUM=20
 
 
    /* val CURRENT_FILE = "text/text"+CURRENT_NUM+".txt"

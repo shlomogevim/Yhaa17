@@ -67,20 +67,20 @@ object Page {
             StyleObject(481, "#e0e0e0", "#18ffff", 24f, 1, 5, 0, 5, 0),
 
 
-            StyleObject(200, "#ffffff", "#000000", 24f, 1, 10, 0, 10, 0),
-            StyleObject(210, "#000000", "#ffffff", 24f, 1, 10, 0, 10, 0),
-            StyleObject(211, "#000000", "#bdbdbd", 28f, 1, 10, 5, 10, 5),
-            StyleObject(212, "#fbc02d", "#ffffff", 28f, 1, 10, 5, 10, 5),
-            StyleObject(213, "#d1c4e9", "#ffffff", 28f, 1, 10, 5, 10, 5),
-            StyleObject(220, "#bdbdbd", "#000000", 28f, 1, 10, 5, 10, 5),
-            StyleObject(230, "#ffebee", "#e91e63", 35f, 1, 80, 0, 80, 0),
-            StyleObject(240, "none", "#1e88e5", 50f, 1, 10, 20, 10, 20),
-            StyleObject(250, "none", "#ffffff", 28f, 1, 10, 5, 10, 5),
-            StyleObject(260, "none", "#44000D", 28f, 1, 20, 20, 20, 20),
-            StyleObject(270, "#e3f2fd", "#44000D", 28f, 1, 10, 20, 10, 20),
-            StyleObject(280, "none", "#6ff9ff", 28f, 1, 10, 5, 10, 0),
-            StyleObject(290, "none", "#f9a825", 28f, 1, 10, 80, 10, 20),
-            StyleObject(300, "#e3f2fd", "#1e88e5", 28f, 1, 10, 5, 10, 5)
+            StyleObject(200, "#ffffff", "#000000", 24f, 1, 5, 0, 5, 0),
+            StyleObject(210, "#000000", "#ffffff", 24f, 1, 5, 0, 5, 0),
+            StyleObject(211, "#000000", "#bdbdbd", 28f, 1, 5, 0, 5, 0),
+            StyleObject(212, "#fbc02d", "#ffffff", 28f, 1, 5, 0, 5, 0),
+            StyleObject(213, "#d1c4e9", "#ffffff", 28f, 1, 5, 0, 5, 0),
+            StyleObject(220, "#bdbdbd", "#000000", 28f, 1, 5, 0, 5, 0),
+            StyleObject(230, "#ffebee", "#e91e63", 35f, 1, 5, 0, 5, 0),
+            StyleObject(240, "none", "#1e88e5", 50f, 1, 5, 0, 5, 0),
+            StyleObject(250, "none", "#ffffff", 28f, 1, 5, 0, 5, 0),
+            StyleObject(260, "none", "#44000D", 28f, 1, 5, 0, 5, 0),
+            StyleObject(270, "#e3f2fd", "#44000D", 28f, 1, 5, 0, 5, 0),
+            StyleObject(280, "none", "#6ff9ff", 28f, 1, 5, 0, 5, 0),
+            StyleObject(290, "none", "#f9a825", 28f, 1, 5, 0, 5, 0),
+            StyleObject(300, "#e3f2fd", "#1e88e5", 28f, 1, 5, 0, 5, 0)
 
 
         )
