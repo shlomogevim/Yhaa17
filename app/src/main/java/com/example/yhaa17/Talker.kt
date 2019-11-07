@@ -13,10 +13,10 @@ class Talker(
     var colorBack: String = "none",
     var backExist:Boolean=true,
     var colorText: String = "#ffffff",
-    var num: Int = 0,
-    var lines: Int = 1,
-    var paddingLeft:Int=0,
-    var paddingTop:Int=0,
-    var paddingRight:Int=0,
-    var paddingButton:Int=0
+    var numTalker: Int = 0,
+    var radius: Float = 30f,
+    var padding:ArrayList<Int> = arrayListOf(10,0,10,0),
+    var colorBorder: String = "#000000"
+//left,up,right,down
+
 ) : Serializable

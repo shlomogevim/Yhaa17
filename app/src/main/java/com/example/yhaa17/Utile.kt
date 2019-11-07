@@ -95,7 +95,7 @@ object Utile {
 
     fun move_swing(selector: Int, talker: Talker, arr: ArrayList<TextView?>, dur: Long) {
 
-        val linesNum = talker.lines
+        val linesNum = talker.takingArray.size
         if (selector == 0) {
             for (index in 1..linesNum) {
                 item_move(index, arr[index - 1]!!, dur)
@@ -171,7 +171,7 @@ object Utile {
 
     fun scale_swing(selector: Int, talker: Talker, arr: ArrayList<TextView?>, dur: Long) {
 
-        val linesNum = talker.lines
+        val linesNum = talker.takingArray.size
         if (selector == 0) {
             for (index in 0 until linesNum) {
                 arr[index]?.let { item_scale(index + 1, it, dur) }
@@ -244,7 +244,7 @@ object Utile {
 
 
     fun move_scale_rotate(selector: Int, talker: Talker, arr: ArrayList<TextView?>, dur: Long) {
-        val linesNum = talker.lines
+        val linesNum = talker.takingArray.size
         if (selector == 0) {
             for (index in 0 until linesNum) {
                 arr[index]?.let { item_move_scale_rotate(index + 1, it, dur) }
@@ -345,7 +345,7 @@ object Utile {
         if (selector == 6) {
             for (index in 1..linesNum) {
                 arr[index - 1]?.let {
-                    if (index <= talker.lines - 1) {
+                    if (index <= talker.takingArray.size - 1) {
                         item_move_scale_rotate(index, it, dur)
                     } else {
                         item_scale_swing(index, it, dur)

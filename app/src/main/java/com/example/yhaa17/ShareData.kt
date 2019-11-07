@@ -78,14 +78,13 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
                 with(talker) {
                     whoSpeake = "man"
                     taking = st1.trim()
-                    num = countItem
+                    numTalker = countItem
                     var arr = st1.split("\n")
                     for (item in arr) {
                         if (item != "") {
                             takingArray.add(item)
                         }
                     }
-                    lines = takingArray.size
                     colorText="#000000"
                     colorBack="#ffffff"
                     animNum=10
@@ -98,14 +97,13 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
                 with (talker) {
                     whoSpeake = "god"
                     talker.taking = st2.trim()
-                    talker.num = countItem
+                    talker.numTalker = countItem
                     var arr = st2.split("\n")
                     for (item in arr) {
                         if (item != "") {
                             takingArray.add(item)
                         }
                     }
-                    talker.lines = takingArray.size
                     colorText="#000000"
                     colorBack="#ffffff"
                     animNum=10

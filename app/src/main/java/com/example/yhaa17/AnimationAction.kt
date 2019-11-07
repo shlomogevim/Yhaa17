@@ -138,7 +138,8 @@ class AnimationAction(val context: Context, val view: View) {
 
 
         val shape = GradientDrawable()
-        shape.setCornerRadius(30f)
+        shape.setCornerRadius(talker.radius)
+        shape.setStroke(20,Color.parseColor(talker.colorBorder))
 
         with(talker) {
             if (colorBack == "none" || !backExist) {
@@ -162,7 +163,8 @@ class AnimationAction(val context: Context, val view: View) {
 
             tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
             tv.typeface = helper.getTypeFace(1)
-            tv.setPadding(paddingLeft, paddingTop, paddingRight, paddingButton)
+            tv.setPadding(padding[0], padding[1], padding[2], padding[3])
+            tv.setPadding(40, 40, 40, 40)
             tv.text = st
         }
         return tv
@@ -240,7 +242,7 @@ class AnimationAction(val context: Context, val view: View) {
         var i = 0
         while (bo && i < Page.styleArray.size) {
 
-            if (Page.styleArray[i].num == index) {
+            if (Page.styleArray[i].numStyleObject == index) {
                 style1 = Page.styleArray[i]
                 bo = false
             }

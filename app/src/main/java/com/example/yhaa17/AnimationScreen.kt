@@ -1,7 +1,10 @@
 package com.example.yhaa17
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -52,7 +55,7 @@ class AnimationScreen : AppCompatActivity() {
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
         sharData = ShareData(this, currentFileNum)
         talkList = sharData.getTalkingList(1)
-        textTalkList=sharData.createTalkListFromTheStart()
+        textTalkList = sharData.createTalkListFromTheStart()
 
         initValues()
         buttonZone()
@@ -68,40 +71,45 @@ class AnimationScreen : AppCompatActivity() {
 
         manMode = counterStep % 2 != 0
 
-       // tranferValue(0)
+        // tranferValue(0)
         updateTitleTalkerSituation()
         animationInAction1.excuteTalker(talkList[counterStep])
-
     }
- fun createSpecialTalkList(){
-     spicalTalkList= arrayListOf(
 
-         Talker(num = 1,styleNum = 411,animNum = 61,textSize = 288f,dur = 3000) // god "YES"
-     )
- }
+    private fun trySomething() {
 
-    fun copyTalker(index:Int){
-        var bo=true
-        var i=0
-        while (bo && i<spicalTalkList.size){
-            if (spicalTalkList[i].num==index){
-                val spcialTalk=spicalTalkList[i]
-                talkList[counterStep].styleNum=spcialTalk.styleNum
-                talkList[counterStep].animNum=spcialTalk.animNum
-                talkList[counterStep].textSize=spcialTalk.textSize
-                talkList[counterStep].dur=spcialTalk.dur
-                talkList[counterStep].colorText=spcialTalk.colorText
-                talkList[counterStep].colorBack=spcialTalk.colorBack
-                bo=false
+        talkList[counterStep].colorBorder="#ffb300"
+        generalOperation()
+      //  copyTalker(1)
+    }
+
+
+
+    fun copyTalker(index: Int) {
+        var bo = true
+        var i = 0
+        while (bo && i < spicalTalkList.size) {
+            if (spicalTalkList[i].numTalker == index) {
+                val spcialTalk = spicalTalkList[i]
+                talkList[counterStep].styleNum = spcialTalk.styleNum
+                talkList[counterStep].animNum = spcialTalk.animNum
+                talkList[counterStep].textSize = spcialTalk.textSize
+                talkList[counterStep].dur = spcialTalk.dur
+                talkList[counterStep].colorText = spcialTalk.colorText
+                talkList[counterStep].colorBack = spcialTalk.colorBack
+                bo = false
             }
         }
         upgradeTalker()
     }
-    private fun trySomething() {
 
-        copyTalker(1)
+    fun createSpecialTalkList() {
+        spicalTalkList = arrayListOf(
+
+            Talker(
+                numTalker = 1,styleNum = 411,animNum = 61, textSize = 288f,dur = 3000) // god "YES"
+        )
     }
-
     private fun initValues() {
 
         myPref = getSharedPreferences(PREFS_NAME, 0)
@@ -118,7 +126,7 @@ class AnimationScreen : AppCompatActivity() {
         var i = 0
         while (bo && i < Page.styleArray.size) {
 
-            if (Page.styleArray[i].num == index) {
+            if (Page.styleArray[i].numStyleObject == index) {
                 style1 = Page.styleArray[i]
                 bo = false
             }
@@ -135,7 +143,7 @@ class AnimationScreen : AppCompatActivity() {
         }
         animList.add("NB")
         for (item in Page.styleArray) {
-            val st = item.num.toString()
+            val st = item.numStyleObject.toString()
             animList.add(st)
         }
         for (i in 0..15) {
@@ -168,48 +176,17 @@ class AnimationScreen : AppCompatActivity() {
     }
 
 
-
-
     private fun updateTitleTalkerSituation() {
         with(talkList[counterStep]) {
             val text =
-                "line->$lines style->$styleNum anim->$animNum size->$textSize dur->$dur $whoSpeake"
+                "line->${takingArray.size} style->$styleNum anim->$animNum size->$textSize dur->$dur $whoSpeake"
             tvAnimatinKind.text = text
-            tvPage.text = num.toString()
+            tvPage.text = counterStep.toString()
         }
 
-        /*val text1 =
-            "current: style->$current_styleNum action->$current_animNum size->$current_textSize dur->$current_dur "
-        currentParameterTv.text = text1*/
-    }
-
-    private fun tranferValue(ind: Int) {
+       }
 
 
-        with(talkList[counterStep]) {
-            if (ind == 0) {
-                current_styleNum = styleNum
-                current_animNum = animNum
-                current_dur = dur
-                current_textSize = textSize
-            } else {
-                styleNum = current_styleNum
-                trasferStyle()
-                animNum = current_animNum
-                if (current_dur > 100) {
-                    dur = current_dur
-                } else {
-                    current_dur = 100
-                }
-                if (current_textSize > 10) {
-                    textSize = current_textSize
-                } else {
-                    current_textSize = 10f
-                }
-            }
-        }
-        updateTitleTalkerSituation()
-    }
 
     private fun trasferStyle() {
 
@@ -217,32 +194,29 @@ class AnimationScreen : AppCompatActivity() {
         val style = findStyleObject(item.styleNum)
         item.colorBack = style.colorBack
         item.colorText = style.colorText
-        item.paddingButton = style.paddingButton
-        item.paddingTop = style.paddingTop
-        item.paddingLeft = style.paddingLeft
-        item.paddingRight = style.paddingRight
     }
 
     private fun upgradeTalker() {
 
-        var bo=true
+        var bo = true
         if (talkList[counterStep].textSize < 3) {
             talkList[counterStep].textSize = 3f
             Toast.makeText(this, "Text Size too small", Toast.LENGTH_SHORT).show()
-            bo=false
+            bo = false
         }
         if (talkList[counterStep].dur < 100) {
             talkList[counterStep].textSize = 100f
             Toast.makeText(this, "Duration too small", Toast.LENGTH_SHORT).show()
-            bo=false
+            bo = false
         }
-        if (bo){
+        if (bo) {
             trasferStyle()
             updateTitleTalkerSituation()
             generalOperation()
         }
 
     }
+
     private fun buttonZone() {
         animView.setOnItemClickListener { _, _, position, _ ->
             if (position == 16) {
@@ -250,27 +224,27 @@ class AnimationScreen : AppCompatActivity() {
             } else {
                 talkList[counterStep].backExist = true
                 talkList[counterStep].styleNum = animList[position].toInt()
-               // trasferStyle()
+                // trasferStyle()
             }
             upgradeTalker()
-           // updateTitleTalkerSituation()
-           // generalOperation()
+            // updateTitleTalkerSituation()
+            // generalOperation()
         }
 
         actioAnimLv.setOnItemClickListener { _, _, position, _ ->
             talkList[counterStep].animNum = actionAnimList[position].toInt()
             upgradeTalker()
-           // updateTitleTalkerSituation()
-           // generalOperation()
+            // updateTitleTalkerSituation()
+            // generalOperation()
         }
 
         saveButton.setOnClickListener {
-           //tranferValue(0)
+            //tranferValue(0)
             editor.putInt(CURRENT_SPEAKER, counterStep)
             editor.commit()
             updateTitleTalkerSituation()
             sharData.saveData(talkList)
-           Toast.makeText(this,"It's save Mr",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "It's save Mr", Toast.LENGTH_SHORT).show()
         }
         nextButton.setOnClickListener {
             counterStep++
@@ -296,11 +270,8 @@ class AnimationScreen : AppCompatActivity() {
         }
 
         btnTry.setOnClickListener {
-
             trySomething()
         }
-
-
         butTP1.setOnClickListener {
             talkList[counterStep].textSize = talkList[counterStep].textSize + 1
             upgradeTalker()
@@ -353,6 +324,42 @@ class AnimationScreen : AppCompatActivity() {
             talkList[counterStep].dur = talkList[counterStep].dur - 1000
             upgradeTalker()
         }
+
+        textRevBtn.setOnClickListener {
+            textTalkList = sharData.createTalkListFromTheStart()
+            for (index in 0..talkList.size - 1) {
+                val st1 = textTalkList[index].taking
+                var arr = st1.split("\n")
+                val ar = arrayListOf<String>()
+                for (item in arr) {
+                    if (item != "") {
+                        ar.add(item)
+                    }
+                }
+                talkList[index].takingArray = ar
+                talkList[index].taking = textTalkList[index].taking
+                generalOperation()
+            }
+            Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
+        }
+
+        pageNumBtn.setOnClickListener {
+            pageNumEditText.visibility = View.VISIBLE
+        }
+
+
+        pageNumEditText.setOnClickListener {
+            var currentPage = 1
+            counterStep = pageNumEditText.text.toString().toInt()
+            upgradeTalker()
+            pageNumEditText.visibility=View.INVISIBLE
+            pageNumEditText.hideKeyboard()
+
+        }
+
+        displayAgainBtn.setOnClickListener {
+            generalOperation()
+        }
         goddy.setOnClickListener {
             if (manMode) {
                 counterStep++
@@ -361,24 +368,6 @@ class AnimationScreen : AppCompatActivity() {
                 Toast.makeText(this, "נסה שוב, זה התור של האדם לדבר", Toast.LENGTH_LONG).show()
             }
         }
-        textRevBtn.setOnClickListener {
-            textTalkList=sharData.createTalkListFromTheStart()
-            for (index in 0..talkList.size-1){
-                val st1=textTalkList[index].taking
-                var arr = st1.split("\n")
-                val ar= arrayListOf<String>()
-                for (item in arr) {
-                    if (item != "") {
-                        ar.add(item)
-                    }
-                }
-                talkList[index].takingArray=ar
-                talkList[index].lines=ar.size
-                talkList[index].taking=textTalkList[index].taking
-            }
-            Toast.makeText(this,"Read all text From the start",Toast.LENGTH_SHORT).show()
-        }
-
         man.setOnClickListener {
             if (!manMode) {
                 counterStep++
@@ -395,7 +384,38 @@ class AnimationScreen : AppCompatActivity() {
         }
 
     }
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
 
+    private fun tranferValue(ind: Int) {
+
+
+        with(talkList[counterStep]) {
+            if (ind == 0) {
+                current_styleNum = styleNum
+                current_animNum = animNum
+                current_dur = dur
+                current_textSize = textSize
+            } else {
+                styleNum = current_styleNum
+                trasferStyle()
+                animNum = current_animNum
+                if (current_dur > 100) {
+                    dur = current_dur
+                } else {
+                    current_dur = 100
+                }
+                if (current_textSize > 10) {
+                    textSize = current_textSize
+                } else {
+                    current_textSize = 10f
+                }
+            }
+        }
+        updateTitleTalkerSituation()
+    }
 
     private fun addStyleValueToTalkingList() {
         for (item in talkList) {
@@ -403,10 +423,6 @@ class AnimationScreen : AppCompatActivity() {
             val style = findStyleObject(numStyle)
             item.colorBack = style.colorBack
             item.colorText = style.colorText
-            item.paddingButton = style.paddingButton
-            item.paddingTop = style.paddingTop
-            item.paddingLeft = style.paddingLeft
-            item.paddingRight = style.paddingRight
         }
 
     }
