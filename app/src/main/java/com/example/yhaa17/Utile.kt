@@ -1,6 +1,7 @@
 package com.example.yhaa17
 
 import android.content.res.Resources
+import android.graphics.Color
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 
@@ -102,15 +103,20 @@ object Utile {
         }
 
         if (selector == 1) {
-            for (index in 1..linesNum) {
-                arr[index - 1]?.let {
-                    if (index == 1) {
-                        item_move(index, it, dur)
-                    } else {
-                        item_move_swing(index, it, dur)
+            if (linesNum>1) {
+                for (index in 1..linesNum) {
+                    arr[index - 1]?.let {
+                        if (index == 1) {
+                            item_move(index, it, dur)
+                        } else {
+                            item_move_swing(index, it, dur)
 
+                        }
                     }
                 }
+            }else{
+                item_move_swing(1, arr[0]!!, dur)
+
             }
         }
         if (selector == 2) {
@@ -546,19 +552,39 @@ object Utile {
     }
 
 
-    fun godAppearFromTwoPlaces(arr: ArrayList<TextView?>,arr1: ArrayList<TextView?>,dur: Long) {
+    fun godAppearFromTwoPlaces(ind:Int,arr: ArrayList<TextView?>,arr1: ArrayList<TextView?>,color:String,dur: Long) {
 
-        ViewAnimator
-            .animate(arr[0])
-            .translationX(-wi / 2, 0f)
-            .translationY(hi, 0f)
-            .scale(0f, 1f)
-            .andAnimate(arr1[0])
-            .translationX(wi / 2, 0f)
-            .translationY(hi, 0f)
-            .scale(0f, 1f)
-            .duration(dur)
-            .start()
+       if (ind==0) {
+           ViewAnimator
+               .animate(arr[0])
+               .translationX(-wi / 2, 0f)
+               .translationY(hi, 0f)
+               .scale(0f, 1f)
+               .andAnimate(arr1[0])
+               .translationX(wi / 2, 0f)
+               .translationY(hi, 0f)
+               .scale(0f, 1f)
+               .duration(dur)
+               .start()
+       }
+        if (ind==1) {
+            arr[0]?.setBackgroundColor(Color.TRANSPARENT)
+            arr1[0]?.setBackgroundColor(Color.TRANSPARENT)
+            ViewAnimator
+                .animate(arr[0])
+                .translationX(-wi / 2, 0f)
+                .translationY(hi, 0f)
+                .scale(0f, 1f)
+                .andAnimate(arr1[0])
+                .translationX(wi / 2, 0f)
+                .translationY(hi, 0f)
+                .scale(0f, 1f)
+                .duration(dur)
+                .thenAnimate(arr[0])
+                .backgroundColor(Color.parseColor(color))
+                .duration(2000)
+                .start()
+        }
 
 
     }

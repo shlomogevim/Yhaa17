@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.god_layout.view.*
 import kotlinx.android.synthetic.main.man_layout.view.*
@@ -43,6 +44,7 @@ class AnimationAction(val context: Context, val view: View) {
 
 
     private fun initTextview() {
+
         tv0 = null
         tv0A = null
         tv1 = null
@@ -117,10 +119,14 @@ class AnimationAction(val context: Context, val view: View) {
             50 -> Utile.apeareOneAfterAnother(listOfTextview, dur)
             51 -> Utile.apeareOneAfterAnotherAndSwing(listOfTextview, dur)
 
-            60 -> if (talker.whoSpeake == "god") {
-                Utile.godAppearFromTwoPlaces(listOfTextview, listOfTextviewM, dur)
+            4, 60 -> if (talker.whoSpeake == "god") {
+                Utile.godAppearFromTwoPlaces(0, listOfTextview, listOfTextviewM,talker.colorBack, dur)
             } else {
                 Utile.move_swing(0, talker, listOfTextview, dur)
+                Toast.makeText(context, "Sorry It just for Gog", Toast.LENGTH_LONG).show()
+            }
+            61 -> if (talker.whoSpeake == "god") {
+                Utile.godAppearFromTwoPlaces(1, listOfTextview, listOfTextviewM,talker.colorBack, dur)
             }
             else -> Utile.move_swing(0, talker, listOfTextview, dur)
 
@@ -132,7 +138,7 @@ class AnimationAction(val context: Context, val view: View) {
 
 
         val shape = GradientDrawable()
-        shape.setCornerRadius(60f)
+        shape.setCornerRadius(30f)
 
         with(talker) {
             if (colorBack == "none" || !backExist) {
@@ -161,8 +167,6 @@ class AnimationAction(val context: Context, val view: View) {
         }
         return tv
     }
-
-
 
 
     private fun configGodTextView1(talker: Talker) {

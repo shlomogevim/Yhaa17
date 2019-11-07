@@ -49,7 +49,7 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun createTalkListFromTheStart(): ArrayList<Talker> {
+     fun createTalkListFromTheStart(): ArrayList<Talker> {
         var talkList1 = arrayListOf<Talker>()
         val ADAM = "-אדם-"
         val GOD = "-אלוהים-"
