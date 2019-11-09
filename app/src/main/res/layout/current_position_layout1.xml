@@ -60,24 +60,22 @@
         android:id="@+id/animView"
         android:layout_width="60dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:elevation="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/down_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/durationLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/upper_layout" />
 
     <ListView
         android:id="@+id/actioAnimLv"
         android:layout_width="60dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:elevation="30dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/down_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/durationLayout">
+        app:layout_constraintTop_toBottomOf="@+id/upper_layout">
 
     </ListView>
 
@@ -93,7 +91,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/down_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -147,154 +145,43 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/textLayout"
+        android:id="@+id/upper_layout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvPage"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/butTM20"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:onClick="onClickOprateButton"
-            android:text="T-20"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butTM5"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="T-5"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butTM1"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="T-1"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butTP1"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="T+1"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butTP5"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="T+5"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butTP20"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="T+20"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/durationLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/butDM1000"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="D-1000"
-            android:textSize="10sp" />
-
-        <Button
-            android:id="@+id/butDM500"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="D-500"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butDM100"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="D-100"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butDP100"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="D+100"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butDP500"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="D+500"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/butDP1000"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="D+1000"
-            android:textSize="10sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="50dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/actioAnimLv"
-        app:layout_constraintStart_toEndOf="@+id/animView">
-
-        <Button
             android:id="@+id/textRevBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Correct Text"
-            android:textSize="8sp" />
+            android:text="Re-Test"
+            android:textSize="14sp" />
 
         <Button
-            android:id="@+id/pageNumBtn"
+            android:id="@+id/reSizeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Ch.  Page"
-            android:textSize="8sp" />
+            android:text="Re-Size" />
+
+        <Button
+            android:id="@+id/numInBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nun-In"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/displayAgainBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Display ag."
-            android:textSize="8sp"
+            android:text="Refresh"
+            android:textSize="14sp"
             android:visibility="visible" />
     </LinearLayout>
 
@@ -331,6 +218,21 @@
         app:layout_constraintBottom_toBottomOf="@+id/animView"
         app:layout_constraintEnd_toStartOf="@+id/actioAnimLv"
         app:layout_constraintTop_toTopOf="@+id/animView" />
+
+    <EditText
+        android:id="@+id/colorNam_ET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="#FFFFFF"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

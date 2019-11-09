@@ -2,6 +2,7 @@ package com.example.yhaa17
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,6 +15,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_animation_screen.*
 import kotlinx.android.synthetic.main.current_position_layout1.*
+import kotlinx.android.synthetic.main.god_layout.*
 
 
 class AnimationScreen : AppCompatActivity(), View.OnClickListener {
@@ -52,8 +54,11 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     var paraList = arrayListOf<String>()
     var ttParaList = arrayListOf<String>()
     var actionAnimList = arrayListOf<String>()
-    var ttParaText=0f
-    var ttParaDur=0L
+    var ttParaText = 0f
+    var ttParaDur = 0L
+    var simpleNum = 0
+    var currentColor = "#stam"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_animation_screen)
@@ -77,56 +82,6 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         generalOperation()     // Let's play
     }
 
-    private fun initButton() {
-        butTP1.setOnClickListener { onClick(butTP1) }
-        butTP5.setOnClickListener { onClick(butTP5) }
-        butTP20.setOnClickListener { onClick(butTP20) }
-        butTM1.setOnClickListener { onClick(butTM1) }
-        butTM5.setOnClickListener { onClick(butTM5) }
-        butTM20.setOnClickListener { onClick(butTM20) }
-        butDP100.setOnClickListener { onClick(butDP100) }
-        butDP100.setOnClickListener { onClick(butDP100) }
-        butDP500.setOnClickListener { onClick(butDP500) }
-        butDP1000.setOnClickListener { onClick(butDP1000) }
-        textRevBtn.setOnClickListener { onClick(textRevBtn) }
-        pageNumBtn.setOnClickListener { onClick(pageNumBtn) }
-        pageNumEditText.setOnClickListener { onClick(pageNumEditText) }
-        btnTry.setOnClickListener { onClick(btnTry) }
-        saveButton.setOnClickListener { onClick(saveButton) }
-        nextButton.setOnClickListener { onClick(nextButton) }
-        previousButton.setOnClickListener { onClick(previousButton) }
-        init_button.setOnClickListener { onClick(init_button) }
-
-    }
-
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            id.butTP1 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 1)
-            id.butTP5 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 5)
-            id.butTP20 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 20)
-            id.butTM1 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 1)
-            id.butTM5 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 5)
-            id.butTM20 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 20)
-            id.butDP100 -> activatApp.durationUpgrade(talkList, counterStep, 1, 100)
-            id.butDP500 -> activatApp.durationUpgrade(talkList, counterStep, 1, 500)
-            id.butDP1000 -> activatApp.durationUpgrade(talkList, counterStep, 1, 1000)
-            id.textRevBtn -> {
-                val textTalkList = sharData.createTalkListFromTheStart()
-                activatApp.textReRead(talkList, textTalkList)
-            }
-            id.pageNumBtn -> pageNumEditText.visibility = View.VISIBLE
-            id.pageNumEditText -> pageNumEdit()
-            id.btnTry -> trySomething()
-            id.saveButton -> saveIt()
-            id.nextButton -> nextIt()
-            id.previousButton -> previousIt()
-            id.init_button -> initIt()
-            else -> generalOperation()
-        }
-        generalOperation()
-    }
-
 
     private fun generalOperation() {
         updateTitleTalkerSituation()
@@ -140,18 +95,131 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         animationInAction1.excuteTalker(talkList[counterStep])
     }
 
-    fun pageNumEdit() {
-        var currentPage = 1
-        counterStep = pageNumEditText.text.toString().toInt()
-        upgradeTalker()
-        pageNumEditText.visibility = View.INVISIBLE
-        pageNumEditText.hideKeyboard()
+    private fun getParaList():List<String> = arrayListOf(
+        "TextSize", "Duration", "CopyTalk", "Page","Border Color"
+    )
+    private fun translaePara(position: Int) {
+        when (position) {
+            16 -> talkList[counterStep].textSize = talkList[counterStep].textSize + ttParaText
+            17 -> talkList[counterStep].dur = talkList[counterStep].dur + ttParaDur
+            18 -> activatApp.copyTalker(talkList, counterStep, simpleNum)
+            19 -> enterNewCounterStep()
+            20-> changeBorderColor()
+
+        }
+        generalOperation()
+    }
+
+      private fun getTtParaList():List<String> = arrayListOf(
+        "T+50", "T+20", "T+5", "T+1", "T-1", "T-5", "T-20", "T-50",
+        "D+2000", "D+1000", "D+500", "D+100", "D-100", "D-500", "D-1000", "D-2000",
+        "1", "2", "3", "4", "5", "Color Nun","Color-White","Color-Black"
+    )
+    private fun translaeTtPara(position: Int) {
+        when (position) {
+            16 -> ttParaText = 50f
+            17 -> ttParaText = 20f
+            18 -> ttParaText = 5f
+            19 -> ttParaText = 1f
+            20 -> ttParaText = -1f
+            21 -> ttParaText = -5f
+            22 -> ttParaText = -20f
+            23 -> ttParaText = -50f
+            24 -> ttParaDur = 2000
+            25 -> ttParaDur = 1000
+            26 -> ttParaDur = 500
+            27 -> ttParaDur = 100
+            28 -> ttParaDur = -100
+            29 -> ttParaDur = -500
+            30 -> ttParaDur = -1000
+            31 -> ttParaDur = -2000
+            32, 33, 34, 35, 36 -> simpleNum = ttParaList[position].toInt()
+            37->colorNam_ET.visibility=View.VISIBLE
+            38->currentColor="#ffffff"
+            39->currentColor="#000000"
+
+
+            else -> {
+                ttParaText = 0f
+                ttParaDur = 0
+                simpleNum = 0
+            }
+        }
+
+        Toast.makeText(this, "Don't gorget to select Para to excute", Toast.LENGTH_LONG).show()
+
+    }
+
+    private fun changeBorderColor() {
+        try {
+            val color = Color.parseColor(currentColor)
+        } catch (iae: IllegalArgumentException) {
+            Toast.makeText(this, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        talkList[counterStep].colorBorder=currentColor
+
+    }
+
+    fun enterNewCounterStep() {
+        var newPage = 1
+        try {
+            newPage = pageNumEditText.text.toString().toInt()
+        } catch (e: Exception) {
+            Toast.makeText(this, "IIIigal num entery , try again", Toast.LENGTH_LONG).show()
+            newPage = 0
+        }
+        if (newPage < 1 || newPage > talkList.size - 1) {
+            Toast.makeText(this, "This Talker not exist,\n enter new talker num", Toast.LENGTH_LONG)
+                .show()
+        } else {
+            counterStep = newPage
+            upgradeTalker()
+            pageNumEditText.visibility = View.INVISIBLE
+            pageNumEditText.hideKeyboard()
+        }
+    }
+
+    private fun initButton() {
+        textRevBtn.setOnClickListener { onClick(textRevBtn) }
+        numInBtn.setOnClickListener { onClick(numInBtn) }
+        // pageNumEditText.setOnClickListener { onClick(pageNumEditText) }
+        btnTry.setOnClickListener { onClick(btnTry) }
+        saveButton.setOnClickListener { onClick(saveButton) }
+        nextButton.setOnClickListener { onClick(nextButton) }
+        previousButton.setOnClickListener { onClick(previousButton) }
+        init_button.setOnClickListener { onClick(init_button) }
+        reSizeBtn.setOnClickListener { onClick(reSizeBtn) }
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            id.textRevBtn -> {
+                val textTalkList = sharData.createTalkListFromTheStart()
+                activatApp.textReRead(talkList, textTalkList)
+            }
+            id.numInBtn -> pageNumEditText.visibility = View.VISIBLE
+            // id.pageNumEditText -> enterNewCounterStep()
+            id.btnTry -> trySomething()
+            id.saveButton -> saveIt()
+            id.nextButton -> nextIt()
+            id.previousButton -> previousIt()
+            id.init_button -> initIt()
+            id.reSizeBtn -> talkList[counterStep].textSize = 12f
+            else -> generalOperation()
+        }
+        generalOperation()
     }
 
     private fun trySomething() {
-        talkList[counterStep].colorBorder = "#ffb300"
-        generalOperation()
-        //  activatApp.copyTalker(talkList,counterStep,1)
+        /* talkList[counterStep].colorBorder = "#ffb300"
+         generalOperation()*/
+        /*activatApp.copyTalker(talkList,counterStep,1)
+       generalOperation()*/
+        godLayout.visibility = View.INVISIBLE
+
+
     }
 
 
@@ -192,18 +260,14 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         para_ListView.setSelection(15)
         ttPara_listView.setSelection(15)
     }
+
+
     private fun createTtParaTV() {
         for (i in 0..15) {
             ttParaList.add("1")
         }
-
-        val list = arrayListOf(
-
-            "T+50", "T+20", "T+5", "T+1", "T-1", "T-5", "T-20", "T-50",
-            "D+2000","D+1000","D+500","D+100","D-100","D-500","D-1000","D-2000"
-        )
+     val list=getTtParaList()
         ttParaList.addAll(list)
-
         for (i in 0..20) {
             ttParaList.add("TT-Para $i")
         }
@@ -216,10 +280,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         for (i in 0..15) {
             paraList.add("1")
         }
-        val list = arrayListOf(
-
-            "TextSize", "Duration"
-        )
+        val list=getParaList()
         paraList.addAll(list)
 
         for (i in 0..20) {
@@ -366,194 +427,11 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun translaePara(position: Int) {
-        when (position){
-            16->talkList[counterStep].textSize=talkList[counterStep].textSize+ttParaText
-            17->talkList[counterStep].dur=talkList[counterStep].dur+ttParaDur
-
-        }
-        generalOperation()
-    }
-
-    private fun translaeTtPara(position: Int) {
-        when (position){
-            16->ttParaText=50f
-            17->ttParaText=20f
-            18->ttParaText=5f
-            19->ttParaText=1f
-            20->ttParaText=-1f
-            21->ttParaText=-5f
-            22->ttParaText=-20f
-            23->ttParaText=-50f
-            24->ttParaDur=2000
-            25->ttParaDur=1000
-            26->ttParaDur=500
-            27->ttParaDur=100
-            28->ttParaDur=-100
-            29->ttParaDur=-500
-            30->ttParaDur=-1000
-            31->ttParaDur=-2000
-
-            else->{
-                ttParaText=0f
-                ttParaDur=0
-            }
-        }
-
-Toast.makeText(this,"Don't gorget to select Para to excute",Toast.LENGTH_LONG).show()
-
-    }
 
     fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
-
-    /* private fun trySome() {
-          view.setOnClickListener { v ->
-              when (v.id) {
-                  id.butTP1 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 1)
-                  id.butTP5 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 5)
-                  id.butTP20 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 20)
-                  id.butTM1 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 1)
-                  id.butTM5 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 5)
-                  id.butTM20 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 20)
-                  id.butDP100 -> activatApp.durationUpgrade(talkList, counterStep, 1, 100)
-                  id.butDP500 -> activatApp.durationUpgrade(talkList, counterStep, 1, 500)
-                  id.butDP1000 -> activatApp.durationUpgrade(talkList, counterStep, 1, 1000)
-                  id.textRevBtn -> {
-                      val textTalkList = sharData.createTalkListFromTheStart()
-                      activatApp.textReRead(talkList, textTalkList)
-                  }
-                  id.pageNumBtn -> pageNumEditText.visibility = View.VISIBLE
-                  id.pageNumEditText -> pageNumEdit()
-                  id.btnTry -> trySomething()
-                  id.saveButton -> saveIt()
-                  id.nextButton -> nextIt()
-                  id.previousButton -> previousIt()
-                  id.init_button -> initIt()
-                  else->generalOperation()
-              }
-              generalOperation()
-          }
-      }*/
-    /* fun initButton{
-           butTP1.setOnClickListener { onClick() }
-             id.butTP5 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 5)
-             id.butTP20 -> activatApp.textSizeUpgrade(talkList, counterStep, 1, 20)
-             id.butTM1 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 1)
-             id.butTM5 -> activatApp.textSizeUpgrade(talkList, counterStep, 0, 5)
-             id.butTM20 -> actbivatApp.textSizeUpgrade(talkList, counterStep, 0, 20)
-             id.butDP100 -> activatApp.durationUpgrade(talkList, counterStep, 1, 100)
-             id.butDP500 -> activatApp.durationUpgrade(talkList, counterStep, 1, 500)
-             id.butDP1000 -> activatApp.durationUpgrade(talkList, counterStep, 1, 1000)
-             id.textRevBtn -> {
-                 val textTalkList = sharData.createTalkListFromTheStart()
-                 activatApp.textReRead(talkList, textTalkList)
-             }
-             id.pageNumBtn -> pageNumEditText.visibility = View.VISIBLE
-             id.pageNumEditText -> pageNumEdit()
-             id.btnTry -> trySomething()
-             id.saveButton -> saveIt()
-             id.nextButton -> nextIt()
-             id.previousButton -> previousIt()
-             id.init_button -> initIt()
-             else->generalOperation()
-         }
-         generalOperation()
-     }*/
-
-
-/* private fun buttonZ() {
-        *//* butTP1.setOnClickListener {
-             activatApp.textSizeUpgrade(talkList,counterStep,1,1)
-
-         }*//*
-        butTP1.setOnClickListener {
-            activatApp.textSizeUpgrade(talkList, counterStep, 1, 1)
-        }
-        butTP5.setOnClickListener {
-            activatApp.textSizeUpgrade(talkList, counterStep, 1, 5)
-        }
-        butTP20.setOnClickListener {
-            activatApp.textSizeUpgrade(talkList, counterStep, 1, 20)
-        }
-        butTM1.setOnClickListener {
-            activatApp.textSizeUpgrade(talkList, counterStep, 0, 1)
-        }
-        butTM5.setOnClickListener {
-            activatApp.textSizeUpgrade(talkList, counterStep, 0, 5)
-        }
-        butTM20.setOnClickListener {
-            activatApp.textSizeUpgrade(talkList, counterStep, 0, 20)
-        }
-        butDP100.setOnClickListener {
-            activatApp.durationUpgrade(talkList, counterStep, 1, 100)
-        }
-        butDP500.setOnClickListener {
-            activatApp.durationUpgrade(talkList, counterStep, 1, 500)
-        }
-        butDP1000.setOnClickListener {
-            activatApp.durationUpgrade(talkList, counterStep, 1, 1000)
-        }
-        textRevBtn.setOnClickListener {
-            val textTalkList = sharData.createTalkListFromTheStart()
-            activatApp.textReRead(talkList, textTalkList)
-        }
-        pageNumBtn.setOnClickListener {
-            pageNumEditText.visibility = View.VISIBLE
-        }
-        pageNumEditText.setOnClickListener {
-            pageNumEdit()
-        }
-        btnTry.setOnClickListener {
-            trySomething()
-        }
-        displayAgainBtn.setOnClickListener {
-
-        }
-        saveButton.setOnClickListener {
-            saveIt()
-        }
-        nextButton.setOnClickListener {
-            nextIt()
-            generalOperation()
-        }
-        previousButton.setOnClickListener {
-            previousIt()
-            generalOperation()
-        }
-        init_button.setOnClickListener {
-            initIt()
-        }
-
-        generalOperation()
-    }*/
-    /* fun copyTalker(index: Int) {
-        var bo = true
-        var i = 0
-        while (bo && i < spicalTalkList.size) {
-            if (spicalTalkList[i].numTalker == index) {
-                val spcialTalk = spicalTalkList[i]
-                talkList[counterStep].styleNum = spcialTalk.styleNum
-                talkList[counterStep].animNum = spcialTalk.animNum
-                talkList[counterStep].textSize = spcialTalk.textSize
-                talkList[counterStep].dur = spcialTalk.dur
-                talkList[counterStep].colorText = spcialTalk.colorText
-                talkList[counterStep].colorBack = spcialTalk.colorBack
-                bo = false
-            }
-        }
-        upgradeTalker()
-    }
-
-    fun createSpecialTalkList() {
-        spicalTalkList = arrayListOf(
-
-            Talker(
-                numTalker = 1,styleNum = 411,animNum = 61, textSize = 288f,dur = 3000) // god "YES"
-        )
-    }*/
 
     private fun tranferValue(ind: Int) {
         with(talkList[counterStep]) {

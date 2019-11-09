@@ -5,21 +5,27 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnimationScreen"
     android:keepScreenOn="true"
-    >
+    tools:context=".AnimationScreen">
 
 
-    <include layout="@layout/current_position_layout1"/>0
-    <include layout="@layout/god_layout" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/current_position_layout1" />
 
-    <include layout="@layout/man_layout" />
+    <include
+        android:id="@+id/include2"
+        layout="@layout/god_layout" />
+
+    <include
+        android:id="@+id/include3"
+        layout="@layout/man_layout" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:elevation="-5dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:elevation="-5dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

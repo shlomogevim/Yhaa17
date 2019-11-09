@@ -100,6 +100,7 @@ class ActivateApp(val context: Context) : AppCompatActivity() {
     }
 
 
+
     fun copyTalker(talkList: ArrayList<Talker>, conterStep: Int, index: Int) {
         var spicalTalkList = arrayListOf(
             Talker(
@@ -115,8 +116,9 @@ class ActivateApp(val context: Context) : AppCompatActivity() {
                 talkList[conterStep].animNum = spcialTalk.animNum
                 talkList[conterStep].textSize = spcialTalk.textSize
                 talkList[conterStep].dur = spcialTalk.dur
-                talkList[conterStep].colorText = spcialTalk.colorText
-                talkList[conterStep].colorBack = spcialTalk.colorBack
+                val style = findStyleObject(spcialTalk.styleNum)
+                talkList[conterStep].colorText = style.colorText
+                talkList[conterStep].colorBack = style.colorBack
                 bo = false
             }
         }
