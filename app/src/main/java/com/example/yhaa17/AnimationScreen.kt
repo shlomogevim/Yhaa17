@@ -1,6 +1,8 @@
 package com.example.yhaa17
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -96,7 +98,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun getParaList():List<String> = arrayListOf(
-        "TextSize", "Duration", "CopyTalk", "Page","Border Color"
+        "TextSize", "Duration", "CopyTalk", "Page","Bord Color","Text Color","Back Color"
     )
     private fun translaePara(position: Int) {
         when (position) {
@@ -105,6 +107,8 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
             18 -> activatApp.copyTalker(talkList, counterStep, simpleNum)
             19 -> enterNewCounterStep()
             20-> changeBorderColor()
+            21-> changeTextColor()
+            22-> changeBackColor()
 
         }
         generalOperation()
@@ -113,7 +117,9 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
       private fun getTtParaList():List<String> = arrayListOf(
         "T+50", "T+20", "T+5", "T+1", "T-1", "T-5", "T-20", "T-50",
         "D+2000", "D+1000", "D+500", "D+100", "D-100", "D-500", "D-1000", "D-2000",
-        "1", "2", "3", "4", "5", "Color Nun","Color-White","Color-Black"
+        "1", "2", "3", "4", "5", "Piker Color","Color Nun","C-White","C-Black","C-Red",
+          "C-Pink","C-Purple","C-Blue","C-LBlue","C-Teal","C-Green","C-LGreen","C-Lime",
+          "C-Yellow","C-Amber","C-Orange","C-DOrange","C-Brown","C-Gray","C-BGray"
     )
     private fun translaeTtPara(position: Int) {
         when (position) {
@@ -134,9 +140,26 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
             30 -> ttParaDur = -1000
             31 -> ttParaDur = -2000
             32, 33, 34, 35, 36 -> simpleNum = ttParaList[position].toInt()
-            37->colorNam_ET.visibility=View.VISIBLE
-            38->currentColor="#ffffff"
-            39->currentColor="#000000"
+            37->selectColor()
+            38->colorNam_ET.visibility=View.VISIBLE
+            39->currentColor="#ffffff"
+            40->currentColor="#000000"
+            41->currentColor="#8e0000"
+            41->currentColor="#ad1457"
+            42->currentColor="#9c27b0"
+            43->currentColor="#1565c0"
+            44->currentColor="#03a9f4"
+            45->currentColor="#009688"
+            46->currentColor="#00701a"
+            47->currentColor="#9ccc65"
+            48->currentColor="#a0af22"
+            49->currentColor="#fdd835"
+            50->currentColor="#ffc107"
+            51->currentColor="#ff9800"
+            52->currentColor="#ff5722"
+            53->currentColor="#4b2c20"
+            54->currentColor="#9e9e9e"
+            55->currentColor="#90a4ae"
 
 
             else -> {
@@ -150,6 +173,19 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun selectColor() {
+        val intent= Intent(this,SelectColor::class.java)
+        startActivityForResult(intent,12)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode==Activity.RESULT_OK){
+            currentColor= data?.getStringExtra("color")!!
+
+        }
+    }
+
     private fun changeBorderColor() {
         try {
             val color = Color.parseColor(currentColor)
@@ -159,6 +195,28 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         }
 
         talkList[counterStep].colorBorder=currentColor
+
+    }
+    private fun changeTextColor() {
+        try {
+            val color = Color.parseColor(currentColor)
+        } catch (iae: IllegalArgumentException) {
+            Toast.makeText(this, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        talkList[counterStep].colorText=currentColor
+
+    }
+    private fun changeBackColor() {
+        try {
+            val color = Color.parseColor(currentColor)
+        } catch (iae: IllegalArgumentException) {
+            Toast.makeText(this, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        talkList[counterStep].colorBack=currentColor
 
     }
 
@@ -184,7 +242,6 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     private fun initButton() {
         textRevBtn.setOnClickListener { onClick(textRevBtn) }
         numInBtn.setOnClickListener { onClick(numInBtn) }
-        // pageNumEditText.setOnClickListener { onClick(pageNumEditText) }
         btnTry.setOnClickListener { onClick(btnTry) }
         saveButton.setOnClickListener { onClick(saveButton) }
         nextButton.setOnClickListener { onClick(nextButton) }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectColor">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:text="TutorialKart - Color Picker"
+            android:textSize="25sp"
+            android:padding="25sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnColorSelected"
+            android:layout_width="200sp"
+            android:layout_height="200sp" />
+
+        <Button
+            android:id="@+id/btnColorPicker"
+            android:layout_margin="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Color Picker" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/picker_layout" />
+
+</RelativeLayout>
+
+
