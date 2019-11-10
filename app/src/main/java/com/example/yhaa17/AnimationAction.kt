@@ -14,50 +14,13 @@ import java.util.*
 
 class AnimationAction(val context: Context, val view: View) {
 
-    val helper = Helper(context)
-    var tv0: TextView? = null
-    var tv0A: TextView? = null
-    var tv1: TextView? = null
-    var tv2: TextView? = null
-    var tv3: TextView? = null
-    var tv4: TextView? = null
-    var tv5: TextView? = null
-
-    //val arrTextView = arrayOf(tv0, tv1, tv2, tv3, tv4, tv5)
-
-    var man0: TextView = view.manSpeaking0
-    var man1: TextView = view.manSpeaking1
-    var man2: TextView = view.manSpeaking2
-    var man3: TextView = view.manSpeaking3
-    var man4: TextView = view.manSpeaking4
-    var man5: TextView = view.manSpeaking5
-    var god0: TextView = view.godSpeaking0
-    var god0A: TextView = view.godSpeaking0A
-    var god1: TextView = view.godSpeaking1
-    var god2: TextView = view.godSpeaking2
-    var god3: TextView = view.godSpeaking3
-    var god4: TextView = view.godSpeaking4
-    var god5: TextView = view.godSpeaking5
-
-    var listOfTextview = arrayListOf<TextView?>()
-    var listOfTextviewMul = arrayListOf<TextView?>()
 
 
-    private fun initTextview() {
-
-        tv0 = null
-        tv0A = null
-        tv1 = null
-        tv2 = null
-        tv3 = null
-        tv4 = null
-        tv5 = null
-    }
 
     fun excuteTalker(talker: Talker) {
         // initAllTextview(500)
         if (talker.whoSpeake == "man") {
-            configManTextView1(talker)
+            configManTextView(talker)
             listOfTextview.clear()
             listOfTextview = arrayListOf(tv0, tv1, tv2, tv3, tv4, tv5)
             listOfTextview.removeAll(Collections.singleton(null))
@@ -65,7 +28,7 @@ class AnimationAction(val context: Context, val view: View) {
         }
 
         if (talker.whoSpeake == "god") {
-            configGodTextView1(talker)
+            configGodTextView(talker)
             listOfTextview.clear()
             listOfTextview = arrayListOf(tv0, tv1, tv2, tv3, tv4, tv5)
             listOfTextview.removeAll(Collections.singleton(null))
@@ -134,19 +97,22 @@ class AnimationAction(val context: Context, val view: View) {
 
     }
 
-    private fun styleTextViewTalk1(tv: TextView, st: String, talker: Talker): TextView {
+    private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
 
 
         val shape = GradientDrawable()
         shape.setCornerRadius(talker.radius)
-        shape.setStroke(20,Color.parseColor(talker.colorBorder))
+
+        shape.setStroke(20,Color.parseColor(talker.borderColor))
 
         with(talker) {
             if (colorBack == "none" || !backExist) {
-                shape.setColor(Color.parseColor("#00ff0000"))  //00 its all trans
+                shape.setColor(Color.TRANSPARENT)
+                shape.setStroke(20,Color.TRANSPARENT)
             } else {
                 try {
                     shape.setColor(Color.parseColor(colorBack))
+                    shape.setStroke(20,Color.parseColor(talker.borderColor))
                 } catch (e: Exception) {
                     shape.setColor(Color.parseColor("#000000"))
                 }
@@ -159,8 +125,6 @@ class AnimationAction(val context: Context, val view: View) {
                 tv.setTextColor(Color.parseColor("#ffffff"))
             }
 
-            var t = textSize
-
             tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
             tv.typeface = helper.getTypeFace(1)
             tv.setPadding(padding[0], padding[1], padding[2], padding[3])
@@ -171,27 +135,27 @@ class AnimationAction(val context: Context, val view: View) {
     }
 
 
-    private fun configGodTextView1(talker: Talker) {
+    private fun configGodTextView(talker: Talker) {
         initTextview()
         initGodTextview(1)
 
         val arr = talker.takingArray
         val size = arr.size
 
-        tv0 = styleTextViewTalk1(god0, arr[0], talker)
+        tv0 = styleTextViewTalk(god0, arr[0], talker)
         //  if (talker.animNum == 60) {
-        tv0A = styleTextViewTalk1(god0A, arr[0], talker)
+        tv0A = styleTextViewTalk(god0A, arr[0], talker)
         //   } else {
-        if (size > 1) tv1 = styleTextViewTalk1(god1, arr[1], talker)
-        if (size > 2) tv2 = styleTextViewTalk1(god2, arr[2], talker)
-        if (size > 3) tv3 = styleTextViewTalk1(god3, arr[3], talker)
-        if (size > 4) tv4 = styleTextViewTalk1(god4, arr[4], talker)
-        if (size > 5) tv5 = styleTextViewTalk1(god5, arr[5], talker)
+        if (size > 1) tv1 = styleTextViewTalk(god1, arr[1], talker)
+        if (size > 2) tv2 = styleTextViewTalk(god2, arr[2], talker)
+        if (size > 3) tv3 = styleTextViewTalk(god3, arr[3], talker)
+        if (size > 4) tv4 = styleTextViewTalk(god4, arr[4], talker)
+        if (size > 5) tv5 = styleTextViewTalk(god5, arr[5], talker)
         //  }
         initManTextview(500)
     }
 
-    private fun configManTextView1(talker: Talker) {
+    private fun configManTextView(talker: Talker) {
         initTextview()
         initManTextview(1)
         /* val st = talker.taking
@@ -201,39 +165,132 @@ class AnimationAction(val context: Context, val view: View) {
         val arr = talker.takingArray
         val size = arr.size
         if (size == 6) {
-            tv0 = styleTextViewTalk1(man0, arr[0], talker)
-            if (size > 1) tv1 = styleTextViewTalk1(man1, arr[1], talker)
-            if (size > 2) tv2 = styleTextViewTalk1(man2, arr[2], talker)
-            if (size > 3) tv3 = styleTextViewTalk1(man3, arr[3], talker)
-            if (size > 4) tv4 = styleTextViewTalk1(man4, arr[4], talker)
-            if (size > 5) tv5 = styleTextViewTalk1(man5, arr[5], talker)
+            tv0 = styleTextViewTalk(man0, arr[0], talker)
+            if (size > 1) tv1 = styleTextViewTalk(man1, arr[1], talker)
+            if (size > 2) tv2 = styleTextViewTalk(man2, arr[2], talker)
+            if (size > 3) tv3 = styleTextViewTalk(man3, arr[3], talker)
+            if (size > 4) tv4 = styleTextViewTalk(man4, arr[4], talker)
+            if (size > 5) tv5 = styleTextViewTalk(man5, arr[5], talker)
         }
         if (size == 5) {
-            tv0 = styleTextViewTalk1(man1, arr[0], talker)
-            if (size > 1) tv1 = styleTextViewTalk1(man2, arr[1], talker)
-            if (size > 2) tv2 = styleTextViewTalk1(man3, arr[2], talker)
-            if (size > 3) tv3 = styleTextViewTalk1(man4, arr[3], talker)
-            if (size > 4) tv4 = styleTextViewTalk1(man5, arr[4], talker)
+            tv0 = styleTextViewTalk(man1, arr[0], talker)
+            if (size > 1) tv1 = styleTextViewTalk(man2, arr[1], talker)
+            if (size > 2) tv2 = styleTextViewTalk(man3, arr[2], talker)
+            if (size > 3) tv3 = styleTextViewTalk(man4, arr[3], talker)
+            if (size > 4) tv4 = styleTextViewTalk(man5, arr[4], talker)
         }
         if (size == 4) {
-            tv0 = styleTextViewTalk1(man2, arr[0], talker)
-            if (size > 1) tv1 = styleTextViewTalk1(man3, arr[1], talker)
-            if (size > 2) tv2 = styleTextViewTalk1(man4, arr[2], talker)
-            if (size > 3) tv3 = styleTextViewTalk1(man5, arr[3], talker)
+            tv0 = styleTextViewTalk(man2, arr[0], talker)
+            if (size > 1) tv1 = styleTextViewTalk(man3, arr[1], talker)
+            if (size > 2) tv2 = styleTextViewTalk(man4, arr[2], talker)
+            if (size > 3) tv3 = styleTextViewTalk(man5, arr[3], talker)
         }
         if (size == 3) {
-            tv0 = styleTextViewTalk1(man3, arr[0], talker)
-            if (size > 1) tv1 = styleTextViewTalk1(man4, arr[1], talker)
-            if (size > 2) tv2 = styleTextViewTalk1(man5, arr[2], talker)
+            tv0 = styleTextViewTalk(man3, arr[0], talker)
+            if (size > 1) tv1 = styleTextViewTalk(man4, arr[1], talker)
+            if (size > 2) tv2 = styleTextViewTalk(man5, arr[2], talker)
         }
         if (size == 2) {
-            tv0 = styleTextViewTalk1(man4, arr[0], talker)
-            if (size > 1) tv1 = styleTextViewTalk1(man5, arr[1], talker)
+            tv0 = styleTextViewTalk(man4, arr[0], talker)
+            if (size > 1) tv1 = styleTextViewTalk(man5, arr[1], talker)
         }
         if (size == 1) {
-            tv0 = styleTextViewTalk1(man5, arr[0], talker)
+            tv0 = styleTextViewTalk(man5, arr[0], talker)
         }
         initGodTextview(500)
+    }
+
+    private fun initGodTextview(dur: Long) {
+        ViewAnimator
+            .animate(god0, god0A, god1, god2, god3, god4, god5)
+            .scale(0f)
+            .duration(dur)
+            .start()
+    }
+
+    private fun initManTextview(dur: Long) {
+        ViewAnimator
+            .animate(man0, man1, man2, man3, man4, man5)
+            .scale(0f)
+            .duration(dur)
+            .start()
+    }
+
+
+
+//-------------------------------------------------------------------
+
+
+    val helper = Helper(context)
+    var tv0: TextView? = null
+    var tv0A: TextView? = null
+    var tv1: TextView? = null
+    var tv2: TextView? = null
+    var tv3: TextView? = null
+    var tv4: TextView? = null
+    var tv5: TextView? = null
+
+    //val arrTextView = arrayOf(tv0, tv1, tv2, tv3, tv4, tv5)
+
+    var man0: TextView = view.manSpeaking0
+    var man1: TextView = view.manSpeaking1
+    var man2: TextView = view.manSpeaking2
+    var man3: TextView = view.manSpeaking3
+    var man4: TextView = view.manSpeaking4
+    var man5: TextView = view.manSpeaking5
+    var god0: TextView = view.godSpeaking0
+    var god0A: TextView = view.godSpeaking0A
+    var god1: TextView = view.godSpeaking1
+    var god2: TextView = view.godSpeaking2
+    var god3: TextView = view.godSpeaking3
+    var god4: TextView = view.godSpeaking4
+    var god5: TextView = view.godSpeaking5
+
+    var listOfTextview = arrayListOf<TextView?>()
+    var listOfTextviewMul = arrayListOf<TextView?>()
+
+
+    private fun initTextview() {
+
+        tv0 = null
+        tv0A = null
+        tv1 = null
+        tv2 = null
+        tv3 = null
+        tv4 = null
+        tv5 = null
+    }
+ //------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private fun initAllTextview(dur: Long) {
+        ViewAnimator
+            .animate(man0, man1, man2, man3, man4, man5)
+            .scale(0f)
+            .duration(dur)
+            .start()
+        ViewAnimator
+            .animate(god0, god0A, god1, god2, god3, god4, god5)
+            .scale(0f)
+            .duration(dur)
+            .start()
     }
 
     private fun findStyleObject(index: Int): StyleObject {
@@ -253,38 +310,8 @@ class AnimationAction(val context: Context, val view: View) {
     }
 
 
-    private fun initGodTextview(dur: Long) {
-        ViewAnimator
-            .animate(god0, god0A, god1, god2, god3, god4, god5)
-            .scale(0f)
-            .duration(dur)
-            .start()
-    }
-
-    private fun initManTextview(dur: Long) {
-        ViewAnimator
-            .animate(man0, man1, man2, man3, man4, man5)
-            .scale(0f)
-            .duration(dur)
-            .start()
-    }
-
-    private fun initAllTextview(dur: Long) {
-        ViewAnimator
-            .animate(man0, man1, man2, man3, man4, man5)
-            .scale(0f)
-            .duration(dur)
-            .start()
-        ViewAnimator
-            .animate(god0, god0A, god1, god2, god3, god4, god5)
-            .scale(0f)
-            .duration(dur)
-            .start()
-    }
-
-
-    fun manTalk(talker: Talker) {
-        configManTextView1(talker)
+   /* fun manTalk(talker: Talker) {
+        configManTextView(talker)
 
         val listOfTextview = arrayListOf(tv0, tv1, tv2, tv3, tv4, tv5)
         val dur = talker.dur
@@ -322,7 +349,7 @@ class AnimationAction(val context: Context, val view: View) {
             50 -> Utile.apeareOneAfterAnother(listOfTextview, dur)
 
 
-            /*     10 -> Utile.scale_swing(0,talker,listOfTextview, dur)
+            *//*     10 -> Utile.scale_swing(0,talker,listOfTextview, dur)
              11 -> Utile.scale_swing(1,talker,listOfTextview, dur)
              12 -> Utile.scale_swing(2,talker,listOfTextview, dur)
              13 -> Utile.scale_swing(3,talker,listOfTextview, dur)
@@ -332,16 +359,16 @@ class AnimationAction(val context: Context, val view: View) {
               23->Utile.move_scale(3,listOfTextview,dur)
               24->Utile.move_scale(4,listOfTextview,dur)
               25->Utile.move_scale(5,listOfTextview,dur)
- */
+ *//*
             400 -> Utile.scale11(listOfTextview, dur)
             410 -> Utile.scale12(listOfTextview, dur)
             420 -> Utile.scale13(listOfTextview, dur)
         }
         // fadeDownAllGod(dur)
     }
+*/
 
-
-    fun godTalk(talker: Talker) {
+   /* fun godTalk(talker: Talker) {
         scaleDownAllTextview()
 
 
@@ -349,13 +376,13 @@ class AnimationAction(val context: Context, val view: View) {
         val arr = st.split("\n")
         val size = arr.size
 
-        tv0 = styleTextViewTalk1(god0, arr[0], talker)
-        tv0A = styleTextViewTalk1(god0A, arr[0], talker)
-        if (size > 1) tv1 = styleTextViewTalk1(god1, arr[1], talker)
-        if (size > 2) tv2 = styleTextViewTalk1(god2, arr[2], talker)
-        if (size > 3) tv3 = styleTextViewTalk1(god3, arr[3], talker)
-        if (size > 4) tv4 = styleTextViewTalk1(god4, arr[4], talker)
-        if (size > 5) tv5 = styleTextViewTalk1(god5, arr[5], talker)
+        tv0 = styleTextViewTalk(god0, arr[0], talker)
+        tv0A = styleTextViewTalk(god0A, arr[0], talker)
+        if (size > 1) tv1 = styleTextViewTalk(god1, arr[1], talker)
+        if (size > 2) tv2 = styleTextViewTalk(god2, arr[2], talker)
+        if (size > 3) tv3 = styleTextViewTalk(god3, arr[3], talker)
+        if (size > 4) tv4 = styleTextViewTalk(god4, arr[4], talker)
+        if (size > 5) tv5 = styleTextViewTalk(god5, arr[5], talker)
 
         val listOfTextview =
             arrayListOf(tv0, tv1, tv2, tv3, tv4, tv5, tv0A)
@@ -396,8 +423,8 @@ class AnimationAction(val context: Context, val view: View) {
 
         }
     }
-
-    fun scaleDownAllTextview() {
+*/
+   /* fun scaleDownAllTextview() {
         ViewAnimator
             .animate(man0, man1, man2, man3, man4, man5)
             .scale(0f)
@@ -408,7 +435,7 @@ class AnimationAction(val context: Context, val view: View) {
             .scale(0f)
             .duration(500)
             .start()
-    }
+    }*/
 
     /* fun removeAllGodTextview() {
          ViewAnimator
@@ -439,7 +466,7 @@ class AnimationAction(val context: Context, val view: View) {
 
     /* fun manTalk(talker: Talker) {
        initAllManTextview()
-       configManTextView1(talker)
+       configManTextView(talker)
 
        val listOfTextview =
            arrayListOf(tv0, tv1, tv2, tv3, tv4, tv5)

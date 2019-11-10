@@ -48,21 +48,33 @@ object Utile {
             .start()
     }
 
-    fun item_move_swing(ind: Int, textView: TextView, dur: Long) {
+    fun item_move_swing(ind: Int, textView: TextView, dur: Long,rep:Int) {
         var arr = getCordinateAndSpine(ind)
+        if (rep==0){
+            ViewAnimator
+                .animate(textView)
+                .scale(1f)
+                .duration(1)
+                .thenAnimate(textView)
+                .translationX(arr[0], 0f)
+                .translationY(arr[1], 0f)
+                .duration(dur)
+                .start()
+        }else {
 
-        ViewAnimator
-            .animate(textView)
-            .scale(1f)
-            .duration(1)
-            .thenAnimate(textView)
-            .translationX(arr[0], 0f)
-            .translationY(arr[1], 0f)
-            .duration(dur)
-            .thenAnimate(textView)
-            .swing()
-            .repeatCount(1)
-            .start()
+            ViewAnimator
+                .animate(textView)
+                .scale(1f)
+                .duration(1)
+                .thenAnimate(textView)
+                .translationX(arr[0], 0f)
+                .translationY(arr[1], 0f)
+                .duration(dur)
+                .thenAnimate(textView)
+                .swing()
+                .repeatCount(rep)
+                .start()
+        }
     }
 
     fun item_move_scale(ind: Int, textView: TextView, dur: Long) {
@@ -109,13 +121,13 @@ object Utile {
                         if (index == 1) {
                             item_move(index, it, dur)
                         } else {
-                            item_move_swing(index, it, dur)
+                            item_move_swing(index, it, dur,talker.swingRepeat)
 
                         }
                     }
                 }
             }else{
-                item_move_swing(1, arr[0]!!, dur)
+                item_move_swing(1, arr[0]!!, dur,talker.swingRepeat)
 
             }
         }
@@ -125,7 +137,7 @@ object Utile {
                     if (index <= 2) {
                         item_move(index, it, dur)
                     } else {
-                        item_move_swing(index, it, dur)
+                        item_move_swing(index, it, dur,talker.swingRepeat)
 
                     }
                 }
@@ -137,7 +149,7 @@ object Utile {
                     if (index <= 3) {
                         item_move(index, it, dur)
                     } else {
-                        item_move_swing(index, it, dur)
+                        item_move_swing(index, it, dur,talker.swingRepeat)
 
                     }
                 }
@@ -149,7 +161,7 @@ object Utile {
                     if (index <= 4) {
                         item_move(index, it, dur)
                     } else {
-                        item_move_swing(index, it, dur)
+                        item_move_swing(index, it, dur,talker.swingRepeat)
 
                     }
                 }
@@ -161,7 +173,7 @@ object Utile {
                     if (index <= 5) {
                         item_move(index, it, dur)
                     } else {
-                        item_move_swing(index, it, dur)
+                        item_move_swing(index, it, dur,talker.swingRepeat)
 
                     }
                 }

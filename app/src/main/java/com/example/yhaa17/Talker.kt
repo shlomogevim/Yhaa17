@@ -16,7 +16,9 @@ class Talker(
     var numTalker: Int = 0,
     var radius: Float = 30f,
     var padding:ArrayList<Int> = arrayListOf(10,0,10,0),
-    var colorBorder: String = "#000000"
+    var borderColor: String = "#000000",
+    var borderWidth: Int = 20,
+    var swingRepeat:Int=0
 //left,up,right,down
 
 ) : Serializable

@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/animView"
+        android:id="@+id/style_ListView"
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/upper_layout" />
 
     <ListView
-        android:id="@+id/actioAnimLv"
+        android:id="@+id/action_ListView"
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -117,11 +117,12 @@
             android:text="Start" />
 
         <Button
-            android:id="@+id/btnTry"
+            android:id="@+id/plusAndMinusBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Try" />
+            android:text="+"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/saveButton"
@@ -205,9 +206,9 @@
         android:layout_width="110dp"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/animView"
-        app:layout_constraintStart_toEndOf="@+id/animView"
-        app:layout_constraintTop_toTopOf="@+id/animView"
+        app:layout_constraintBottom_toBottomOf="@+id/style_ListView"
+        app:layout_constraintStart_toEndOf="@+id/style_ListView"
+        app:layout_constraintTop_toTopOf="@+id/style_ListView"
         app:layout_constraintVertical_bias="1.0" />
 
     <ListView
@@ -215,9 +216,9 @@
         android:layout_width="110dp"
         android:layout_height="0dp"
         android:layout_marginEnd="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/animView"
-        app:layout_constraintEnd_toStartOf="@+id/actioAnimLv"
-        app:layout_constraintTop_toTopOf="@+id/animView" />
+        app:layout_constraintBottom_toBottomOf="@+id/style_ListView"
+        app:layout_constraintEnd_toStartOf="@+id/action_ListView"
+        app:layout_constraintTop_toTopOf="@+id/style_ListView" />
 
     <EditText
         android:id="@+id/colorNam_ET"

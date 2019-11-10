@@ -11,7 +11,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/current_position_layout1" />
+        layout="@layout/helper_view_layout" />
 
     <include
         android:id="@+id/include2"
