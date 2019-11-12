@@ -6,7 +6,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -42,7 +44,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     var current_textSize = 1f
 
     private var manMode = true
-    private var plusMode=true
+    private var plusMode = true
     private var counterStep = 1
 
     lateinit var animationInAction1: AnimationAction
@@ -56,10 +58,10 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     var paraList = arrayListOf<String>()
     var ttParaList = arrayListOf<String>()
     var actionList = arrayListOf<String>()
-    var floatingInterval = 0f
-    var longInterval = 0L
-    var simpleNum = 0
+
+    var interval = 0
     var currentColor = "#stam"
+    lateinit var lastTalker: Talker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +73,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         sharData = ShareData(this, currentFileNum)
         activatApp = ActivateApp(this)
         talkList = sharData.getTalkingList(1)
-        textTalkList = sharData.createTalkListFromTheStart()
+        // textTalkList = sharData.createTalkListFromTheStart()
 
         initValues()
         styleListView()   //list view in the left side
@@ -80,14 +82,43 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         animationMovmentListView()  // list view in the right side
 
         initButton()
+        lastTalker= Talker()
+        tranferTalkItem(0)
+
+
 
         moveTheAnimation()     // Let's play
+    }
+
+    private fun tranferTalkItem(ind: Int) {
+      if (ind==0){
+          lastTalker=talkList[counterStep].copy()
+         /* lastTalker.swingRepeat=talkList[counterStep].swingRepeat
+          lastTalker.radius=talkList[counterStep].radius*/
+      }else{
+          talkList[counterStep]=lastTalker.copy()
+      }
+
+
+
+    }
+
+    private fun moveTheAnimation() {
+        updateTitleTalkerSituation()
+        if (counterStep < 1) counterStep = 1
+
+        //  counterStep = 1           //*********************
+
+        manMode = counterStep % 2 != 0
+
+        animationInAction1.excuteTalker(talkList[counterStep])
     }
 
     //--------------
     private fun styleListView() {// list view in the left side
         createStyleLV()
         style_ListView.setOnItemClickListener { _, _, position, _ ->
+            tranferTalkItem(0)
             if (position == 16) {     // ther is NB
                 talkList[counterStep].backExist = false
             } else {
@@ -101,7 +132,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     private fun createStyleLV() {
         Page.createBasicStyle()
         for (i in 0..15) {
-            styleList.add("1")
+            styleList.add("-")
         }
         styleList.add("NB")
         for (item in Page.styleArray) {
@@ -109,7 +140,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
             styleList.add(st)
         }
         for (i in 0..15) {
-            styleList.add("1000")
+            styleList.add("-")
         }
         val adapter0 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, styleList)
         style_ListView.adapter = adapter0
@@ -120,22 +151,39 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     private fun patamListView() {
         createParaList()
         para_ListView.setOnItemClickListener { parent, view, position, id ->
+            tranferTalkItem(0)
             translaePara(position)
         }
     }
 
     private fun createParaList() {
-        for (i in 0..15) {
-            paraList.add("1")
+        for (i in 0..6) {
+            paraList.add("-")
         }
         val list = arrayListOf(
-            "TextSize", "Duration", "CopyTalk", "Page", "Bord Color", "Text Color", "Back Color",
-            "Border W.","Repeat S."
+            "Start",
+            "-",
+            "Swing1",
+            "Page",
+            "CopyTalk1",
+            "-",
+            "-",
+            "-",
+            "TextSize",
+            "Duration",
+            "-",
+            "-",
+            "Text Color",
+            "Back Color",
+            "Bord Color",
+            "Bord Line",
+            "No Bord",
+            "Swing Re."
         )
         paraList.addAll(list)
 
         for (i in 0..20) {
-            paraList.add("Para $i")
+            paraList.add("-")
         }
 
         val adapter10 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, paraList)
@@ -144,41 +192,69 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun translaePara(position: Int) {
+        var intv: Int
+        if (plusMode) intv = interval else intv = -interval
         when (position) {
-            16 -> talkList[counterStep].textSize = talkList[counterStep].textSize + floatingInterval
-            17 -> talkList[counterStep].dur = talkList[counterStep].dur + longInterval
-            18 -> activatApp.copyTalker(talkList, counterStep, simpleNum)
-            19 -> enterNewCounterStep()
-            20 -> changeBorderColor()
-            21 -> changeTextColor()
-            22 -> changeBackColor()
-            23 -> changeBorderWidth()
-            24->changeSwingRepeat()
+            7 -> initIt()
+            9 -> changeSwingRepeat(1)
+            10 -> enterNewCounterStep()
+            11 -> activatApp.copyTalker(talkList, counterStep, 1)
+            15 -> talkList[counterStep].textSize = talkList[counterStep].textSize + intv
+            16 -> talkList[counterStep].dur = talkList[counterStep].dur + intv
+            //  17 ->
+            //  18 ->
+            19 -> changeTextColor()
+            20 -> changeBackColor()
+            21 -> changeBorderColor()
+            22 -> changeBorderWidth(intv)
+            23 -> talkList[counterStep].borderWidth=0
+            24 -> changeSwingRepeat(intv)
         }
-        moveTheAnimation()
+        chkNewData()
+        if (position != 10) moveTheAnimation()
     }
 
-    private fun changeSwingRepeat() {
-        talkList[counterStep].swingRepeat=talkList[counterStep].swingRepeat+simpleNum
+    private fun chkNewData() {
+        with(talkList[counterStep]) {
+            if (textSize > 300f) textSize = 300f
+            if (textSize < 8f) textSize = 8f
+            if (dur > 10000f) dur = 10000
+            if (dur < 100f) dur = 100
+            if (radius > 100f) radius = 100f
+            if (radius < 2f) radius = 2f
+            if (borderWidth > 70) borderWidth = 70
+            if (borderWidth < 0) borderWidth = 0
+            if (swingRepeat > 10) swingRepeat = 10
+            if (swingRepeat < 0) swingRepeat = 0
+        }
+    }
+
+    private fun changeSwingRepeat(intv: Int) {
+        talkList[counterStep].swingRepeat = talkList[counterStep].swingRepeat + intv
     }
 
     //------------------------
     private fun ttParaListView() {
         createTtParaTV()
-        ttPara_listView.setOnItemClickListener { parent, view, position, id ->
+        ttPara_listView.setOnItemClickListener { _, view, position, id ->
             translaeTtPara(position)
-            moveTheAnimation()
+            Toast.makeText(
+                this,
+                "Don't forget to select Para ListView to excute the operation",
+                Toast.LENGTH_SHORT
+            ).show()
+            // moveTheAnimation()
         }
     }
 
     private fun createTtParaTV() {
-        for (i in 0..15) {
-            ttParaList.add("1")
+        for (i in 0..13) {
+            ttParaList.add("-")
         }
         val list = getTtParaList()
         ttParaList.addAll(list)
         for (i in 0..20) {
-            ttParaList.add("TT-Para $i")
+            ttParaList.add("-")
         }
 
         val adapter11 = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ttParaList)
@@ -186,43 +262,80 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         ttPara_listView.setSelection(15)
     }
 
-   /* private fun getTtParaList(): List<String> = arrayListOf(
-        "T+50", "T+20", "T+5", "T+1", "T-1", "T-5", "T-20", "T-50",
-        "D+2000", "D+1000", "D+500", "D+100", "D-100", "D-500", "D-1000", "D-2000",
-        "1", "2", "3", "4", "5", "Piker Color", "Color Nun", "C-White", "C-Black", "C-Red",
-        "C-Pink", "C-Purple", "C-Blue", "C-LBlue", "C-Teal", "C-Green", "C-LGreen", "C-Lime",
-        "C-Yellow", "C-Amber", "C-Orange", "C-DOrange", "C-Brown", "C-Gray", "C-BGray"
-    )*/
 
     private fun getTtParaList(): List<String> = arrayListOf(
-        "+50", "+20", "+5", "+1", "-1", "-5", "-20", "-50",
-        "+2000", "+1000", "+500", "+100", "-100", "-500", "-1000", "-2000",
-        "1", "2", "3", "4", "5", "Piker Color", "Color Nun", "C-White", "C-Black", "C-Red",
-        "C-Pink", "C-Purple", "C-Blue", "C-LBlue", "C-Teal", "C-Green", "C-LGreen", "C-Lime",
-        "C-Yellow", "C-Amber", "C-Orange", "C-DOrange", "C-Brown", "C-Gray", "C-BGray"
+        "Piker Color",
+        "Color Nun",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "20",
+        "50",
+        "100",
+        "1000",
+        "2000",
+        "3000",
+        "5000",
+        "C-White",
+        "C-Black",
+        "C-Red",
+        "C-Pink",
+        "C-Purple",
+        "C-Blue",
+        "C-LBlue",
+        "C-Teal",
+        "C-Green",
+        "C-LGreen",
+        "C-Lime",
+        "C-Yellow",
+        "C-Amber",
+        "C-Orange",
+        "C-DOrange",
+        "C-Brown",
+        "C-Gray",
+        "C-BGray"
     )
 
     private fun translaeTtPara(position: Int) {
         when (position) {
-            16 -> floatingInterval = 50f
-            17 -> floatingInterval = 20f
-            18 -> floatingInterval = 5f
-            19 -> floatingInterval = 1f
-            20 -> floatingInterval = -1f
-            21 -> floatingInterval = -5f
-            22 -> floatingInterval = -20f
-            23 -> floatingInterval = -50f
-            24 -> longInterval = 2000
-            25 -> longInterval = 1000
-            26 -> longInterval = 500
-            27 -> longInterval = 100
-            28 -> longInterval = -100
-            29 -> longInterval = -500
-            30 -> longInterval = -1000
-            31 -> longInterval = -2000
-            32, 33, 34, 35, 36 -> simpleNum = ttParaList[position].toInt()
-            37 -> selectColor()
-            38 -> colorNam_ET.visibility = View.VISIBLE
+            14 -> selectColor()
+            15 -> colorNam_ET.visibility = View.VISIBLE
+            16 -> interval = 0
+            17 -> interval = 1
+            18 -> interval = 2
+            19 -> interval = 3
+            20 -> interval = 4
+            21 -> interval = 5
+            22 -> interval = 6
+            23 -> interval = 7
+            24 -> interval = 8
+            25 -> interval = 9
+            26 -> interval = 10
+            27 -> interval = 11
+            28 -> interval = 12
+            29 -> interval = 13
+            30 -> interval = 14
+            31 -> interval = 15
+            32 -> interval = 20
+            33 -> interval = 50
+            34 -> interval = 100
+            35 -> interval = 1000
+            36 -> interval = 2000
+            37 -> interval = 3000
+            38 -> interval = 5000
             39 -> currentColor = "#ffffff"
             40 -> currentColor = "#000000"
             41 -> currentColor = "#8e0000"
@@ -243,18 +356,16 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
             55 -> currentColor = "#90a4ae"
 
             else -> {
-                floatingInterval = 0f
-                longInterval = 0
-                simpleNum = 0
+                interval = 0
             }
         }
-        Toast.makeText(this, "Don't gorget to select Para to excute", Toast.LENGTH_LONG).show()
     }
 
     //------------------------
     private fun animationMovmentListView() {  // list view in the right side
         createAnimLV()
         action_ListView.setOnItemClickListener { _, _, position, _ ->
+            tranferTalkItem(0)
             talkList[counterStep].animNum = actionList[position].toInt()
             moveTheAnimation()
         }
@@ -263,7 +374,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     private fun createAnimLV() {
 
         for (i in 0..15) {
-            actionList.add("1")
+            actionList.add("-")
         }
         val list = arrayListOf(
             "4",
@@ -276,7 +387,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         )
         actionList.addAll(list)
         for (i in 0..15) {
-            actionList.add("1000")
+            actionList.add("-")
         }
         val adapter1 =
             ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, actionList)
@@ -285,17 +396,44 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     //------------------
-    private fun moveTheAnimation() {
-        updateTitleTalkerSituation()
-        if (counterStep < 1) counterStep = 1
 
-        //  counterStep = 1           //*********************
-
-        manMode = counterStep % 2 != 0
-
-        animationInAction1.excuteTalker(talkList[counterStep])
+    override fun onClick(v: View) {
+        when (v.id) {
+            id.textRevBtn -> readAgainTextFile()
+            id.newPageBtn -> enterNewCounterStep()
+            id.plusAndMinusBtn -> changePlusMinusMode()
+            id.displayAgainBtn -> moveTheAnimation()
+            id.saveButton -> saveIt()
+            id.nextButton -> nextIt()
+            id.previousButton -> previousIt()
+            id.lastTalker_button -> retriveLastTalker()
+            id.reSizeTextBtn -> minTextSize()
+            else -> moveTheAnimation()
+        }
     }
 
+    private fun retriveLastTalker() {
+        tranferTalkItem(1)
+        moveTheAnimation()
+    }
+
+    private fun minTextSize() {
+        tranferTalkItem(0)
+        talkList[counterStep].textSize = 12f  // for accsident of bigest text
+        moveTheAnimation()
+    }
+
+    private fun readAgainTextFile() {
+        val textTalkList = sharData.createTalkListFromTheStart()
+        talkList = activatApp.textReRead(talkList, textTalkList)
+        Handler().postDelayed(
+            {
+                moveTheAnimation()
+            },
+            2000 // value in milliseconds
+        )
+        Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
+    }
 
     private fun selectColor() {
         val intent = Intent(this, SelectColor::class.java)
@@ -321,8 +459,9 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         talkList[counterStep].borderColor = currentColor
 
     }
-    private fun changeBorderWidth() {
-        talkList[counterStep].borderWidth = talkList[counterStep].borderWidth+floatingInterval.toInt()
+
+    private fun changeBorderWidth(intv: Int) {
+        talkList[counterStep].borderWidth = talkList[counterStep].borderWidth + intv
 
     }
 
@@ -350,55 +489,72 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun enterNewCounterStep() {
-        var newPage = 1
-        try {
-            newPage = pageNumEditText.text.toString().toInt()
-        } catch (e: Exception) {
-            Toast.makeText(this, "IIIigal num entery , try again", Toast.LENGTH_LONG).show()
-            newPage = 0
-        }
-        if (newPage < 1 || newPage > talkList.size - 1) {
-            Toast.makeText(this, "This Talker not exist,\n enter new talker num", Toast.LENGTH_LONG)
-                .show()
+    private fun showEditText(ind: Int) {
+        if (ind == 0) {
+            style_ListView.visibility = View.INVISIBLE
+            para_ListView.visibility = View.INVISIBLE
+            ttPara_listView.visibility = View.INVISIBLE
+            action_ListView.visibility = View.INVISIBLE
+            pageNumEditText.visibility = View.VISIBLE
         } else {
-            counterStep = newPage
-            upgradeTalker()
+            style_ListView.visibility = View.VISIBLE
+            para_ListView.visibility = View.VISIBLE
+            ttPara_listView.visibility = View.VISIBLE
+            action_ListView.visibility = View.VISIBLE
             pageNumEditText.visibility = View.INVISIBLE
             pageNumEditText.hideKeyboard()
+        }
+
+
+    }
+
+    fun enterNewCounterStep() {
+
+        showEditText(0)
+        pageNumEditText.setHint("Enter New Page")
+
+        pageNumEditText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                var newPage = 1
+                try {
+                    newPage = pageNumEditText.text.toString().toInt()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "IIIigal num entery , try again", Toast.LENGTH_LONG).show()
+                    newPage = 0
+                }
+                if (newPage < 1 || newPage > talkList.size - 1) {
+                    Toast.makeText(
+                        this,
+                        "This Talker not exist,\n enter new talker num",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                } else {
+                    counterStep = newPage
+                    //upgradeTalker()
+                    showEditText(1)
+                    moveTheAnimation()
+                }
+                true
+            } else {
+                false
+            }
         }
     }
 
     private fun initButton() {
         displayAgainBtn.setOnClickListener { onClick(displayAgainBtn) }
         textRevBtn.setOnClickListener { onClick(textRevBtn) }
-        numInBtn.setOnClickListener { onClick(numInBtn) }
+        newPageBtn.setOnClickListener { onClick(newPageBtn) }
         plusAndMinusBtn.setOnClickListener { onClick(plusAndMinusBtn) }
         saveButton.setOnClickListener { onClick(saveButton) }
         nextButton.setOnClickListener { onClick(nextButton) }
         previousButton.setOnClickListener { onClick(previousButton) }
-        init_button.setOnClickListener { onClick(init_button) }
-        reSizeBtn.setOnClickListener { onClick(reSizeBtn) }
+        lastTalker_button.setOnClickListener { onClick(lastTalker_button) }
+        reSizeTextBtn.setOnClickListener { onClick(reSizeTextBtn) }
     }
 
-    override fun onClick(v: View) {
-        when (v.id) {
-            id.textRevBtn -> {
-                val textTalkList = sharData.createTalkListFromTheStart()
-                activatApp.textReRead(talkList, textTalkList)
-            }
-            id.numInBtn -> pageNumEditText.visibility = View.VISIBLE
-            id.plusAndMinusBtn -> changePlusMinusMode()
-            id.displayAgainBtn->moveTheAnimation()
-            id.saveButton -> saveIt()
-            id.nextButton -> nextIt()
-            id.previousButton -> previousIt()
-            id.init_button -> initIt()
-            id.reSizeBtn -> talkList[counterStep].textSize = 12f
-            else -> moveTheAnimation()
-        }
-        moveTheAnimation()
-    }
 
     private fun changePlusMinusMode() {
         if (plusMode) {
@@ -441,8 +597,8 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     private fun updateTitleTalkerSituation() {
         with(talkList[counterStep]) {
             val text =
-  "l=${takingArray.size} style=$styleNum anim=$animNum size=${textSize.toInt()}"+
-          " bord=$borderWidth dur->$dur $whoSpeake"
+                "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
+                        " bord=$borderWidth dur=$dur sw=$swingRepeat"
             tvAnimatinKind.text = text
             tvPage.text = counterStep.toString()
         }
@@ -492,6 +648,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         if (counterStep > max) counterStep = max
         editor.putInt(CURRENT_SPEAKER, counterStep)
         editor.commit()
+        moveTheAnimation()
     }
 
     fun previousIt() {
@@ -499,12 +656,14 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         if (counterStep < 1) counterStep = 1
         editor.putInt(CURRENT_SPEAKER, counterStep)
         editor.commit()
+        moveTheAnimation()
     }
 
     fun initIt() {
         counterStep = 1
         editor.putInt(CURRENT_SPEAKER, counterStep)
         editor.commit()
+        moveTheAnimation()
     }
 
 

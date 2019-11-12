@@ -110,11 +110,11 @@
             android:visibility="visible" />
 
         <Button
-            android:id="@+id/init_button"
+            android:id="@+id/lastTalker_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Start" />
+            android:text="Last" />
 
         <Button
             android:id="@+id/plusAndMinusBtn"
@@ -158,31 +158,33 @@
             android:id="@+id/textRevBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Re-Test"
-            android:textSize="14sp" />
+            android:text="Read Text"
+            android:textSize="10sp" />
 
         <Button
-            android:id="@+id/reSizeBtn"
+            android:id="@+id/reSizeTextBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Re-Size" />
+            android:text="Mini Text"
+            android:textSize="10sp"
+            android:visibility="visible" />
 
         <Button
-            android:id="@+id/numInBtn"
+            android:id="@+id/newPageBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Nun-In"
-            android:textSize="14sp" />
+            android:text="New Page"
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/displayAgainBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Refresh"
-            android:textSize="14sp"
+            android:text="Display"
+            android:textSize="10sp"
             android:visibility="visible" />
     </LinearLayout>
 

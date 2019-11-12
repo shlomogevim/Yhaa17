@@ -19,7 +19,6 @@ class ActivateApp(val context: Context) : AppCompatActivity() {
             }
             talkList[index].takingArray = ar
             talkList[index].taking = textTalkList[index].taking
-            Toast.makeText(context, "Read all text From the start", Toast.LENGTH_SHORT).show()
         }
         return talkList
     }
@@ -107,6 +106,7 @@ class ActivateApp(val context: Context) : AppCompatActivity() {
                 numTalker = 1, styleNum = 411, animNum = 61, textSize = 288f, dur = 3000
             ) // god "YES"
         )
+        if (index==1 && talkList[conterStep].whoSpeake=="man") return
         var bo = true
         var i = 0
         while (bo && i < spicalTalkList.size) {

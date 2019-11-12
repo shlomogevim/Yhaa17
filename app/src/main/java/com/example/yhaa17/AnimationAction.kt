@@ -48,50 +48,51 @@ class AnimationAction(val context: Context, val view: View) {
         listOfTextviewM: ArrayList<TextView?>,
         dur: Long
     ) {
+
         when (talker.animNum) {
-            10 -> Utile.move_swing(0, talker, listOfTextview, dur)
-            11 -> Utile.move_swing(1, talker, listOfTextview, dur)
-            12 -> Utile.move_swing(2, talker, listOfTextview, dur)
-            13 -> Utile.move_swing(3, talker, listOfTextview, dur)
-            14 -> Utile.move_swing(4, talker, listOfTextview, dur)
-            15 -> Utile.move_swing(5, talker, listOfTextview, dur)
+            10 -> Utile.move_swing(10, talker, listOfTextview)
+            11 -> Utile.move_swing(11, talker, listOfTextview)
+            12 -> Utile.move_swing(12, talker, listOfTextview)
+            13 -> Utile.move_swing(13, talker, listOfTextview)
+            14 -> Utile.move_swing(14, talker, listOfTextview)
+            15 -> Utile.move_swing(15, talker, listOfTextview)
 
-            20 -> Utile.scale_swing(0, talker, listOfTextview, dur)
-            21 -> Utile.scale_swing(1, talker, listOfTextview, dur)
-            22 -> Utile.scale_swing(2, talker, listOfTextview, dur)
-            23 -> Utile.scale_swing(3, talker, listOfTextview, dur)
-            24 -> Utile.scale_swing(4, talker, listOfTextview, dur)
-            25 -> Utile.scale_swing(5, talker, listOfTextview, dur)
+            20 -> Utile.scale_swing(20, talker, listOfTextview)
+            21 -> Utile.scale_swing(21, talker, listOfTextview)
+            22 -> Utile.scale_swing(22, talker, listOfTextview)
+            23 -> Utile.scale_swing(23, talker, listOfTextview)
+            24 -> Utile.scale_swing(24, talker, listOfTextview)
+            25 -> Utile.scale_swing(25, talker, listOfTextview)
 
-            30 -> Utile.move_scale(0, listOfTextview, dur)
-            31 -> Utile.move_scale(1, listOfTextview, dur)
-            32 -> Utile.move_scale(2, listOfTextview, dur)
-            33 -> Utile.move_scale(3, listOfTextview, dur)
-            34 -> Utile.move_scale(4, listOfTextview, dur)
-            35 -> Utile.move_scale(5, listOfTextview, dur)
+            30 -> Utile.move_scale(30, listOfTextview, dur)
+            31 -> Utile.move_scale(31, listOfTextview, dur)
+            32 -> Utile.move_scale(32, listOfTextview, dur)
+            33 -> Utile.move_scale(33, listOfTextview, dur)
+            34 -> Utile.move_scale(34, listOfTextview, dur)
+            35 -> Utile.move_scale(35, listOfTextview, dur)
 
 
-            40 -> Utile.move_scale_rotate(0, talker, listOfTextview, dur)
-            41 -> Utile.move_scale_rotate(1, talker, listOfTextview, dur)
-            42 -> Utile.move_scale_rotate(2, talker, listOfTextview, dur)
-            43 -> Utile.move_scale_rotate(3, talker, listOfTextview, dur)
-            44 -> Utile.move_scale_rotate(4, talker, listOfTextview, dur)
-            45 -> Utile.move_scale_rotate(5, talker, listOfTextview, dur)
-            46 -> Utile.move_scale_rotate(6, talker, listOfTextview, dur)
+            40 -> Utile.move_scale_rotate(40, talker, listOfTextview)
+            41 -> Utile.move_scale_rotate(41, talker, listOfTextview)
+            42 -> Utile.move_scale_rotate(42, talker, listOfTextview)
+            43 -> Utile.move_scale_rotate(43, talker, listOfTextview)
+            44 -> Utile.move_scale_rotate(44, talker, listOfTextview)
+            45 -> Utile.move_scale_rotate(45, talker, listOfTextview)
+            46 -> Utile.move_scale_rotate(46, talker, listOfTextview)
 
             50 -> Utile.apeareOneAfterAnother(listOfTextview, dur)
-            51 -> Utile.apeareOneAfterAnotherAndSwing(listOfTextview, dur)
+            51 -> Utile.apeareOneAfterAnotherAndSwing(listOfTextview, talker)
 
             4, 60 -> if (talker.whoSpeake == "god") {
                 Utile.godAppearFromTwoPlaces(0, listOfTextview, listOfTextviewM,talker.colorBack, dur)
             } else {
-                Utile.move_swing(0, talker, listOfTextview, dur)
+                Utile.move_swing(0, talker, listOfTextview)
                 Toast.makeText(context, "Sorry It just for Gog", Toast.LENGTH_LONG).show()
             }
             61 -> if (talker.whoSpeake == "god") {
                 Utile.godAppearFromTwoPlaces(1, listOfTextview, listOfTextviewM,talker.colorBack, dur)
             }
-            else -> Utile.move_swing(0, talker, listOfTextview, dur)
+            else -> Utile.move_swing(0, talker, listOfTextview)
 
         }
 
@@ -112,7 +113,7 @@ class AnimationAction(val context: Context, val view: View) {
             } else {
                 try {
                     shape.setColor(Color.parseColor(colorBack))
-                    shape.setStroke(20,Color.parseColor(talker.borderColor))
+                    shape.setStroke(borderWidth,Color.parseColor(talker.borderColor))
                 } catch (e: Exception) {
                     shape.setColor(Color.parseColor("#000000"))
                 }
@@ -129,7 +130,7 @@ class AnimationAction(val context: Context, val view: View) {
             tv.typeface = helper.getTypeFace(1)
             tv.setPadding(padding[0], padding[1], padding[2], padding[3])
             tv.setPadding(40, 40, 40, 40)
-            tv.text = st
+            tv.text = st.trim()
         }
         return tv
     }

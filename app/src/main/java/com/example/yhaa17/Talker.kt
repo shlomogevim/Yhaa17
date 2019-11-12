@@ -2,7 +2,7 @@ package com.example.yhaa17
 
 import java.io.Serializable
 
-class Talker(
+data class Talker(
     var whoSpeake: String = "man",
     var taking: String = "tadam",
     var takingArray: ArrayList<String> = arrayListOf(),
