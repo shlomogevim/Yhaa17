@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.preference.PreferenceManager
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 
@@ -26,10 +30,15 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         editor = myPref.edit()
     }
 
+/*
+    var pref = con.getSharedPreferences(FILE_NAME, Context.CONTEXT_IGNORE_SECURITY)
+*/
+
 
     fun getTalkingList(ind:Int): ArrayList<Talker> {
         var talkList1: ArrayList<Talker>
         val gson = Gson()
+       // val jsonString = myPref.getString(TALKLIST, null)
         val jsonString = myPref.getString(TALKLIST, null)
 
         if (ind==0 || jsonString == null) {
@@ -65,15 +74,19 @@ class ShareData(val context: Context,val fileNum:Int) : AppCompatActivity() {
         var talker = Talker()
 
         talkList1.add(countItem, talker)
+         var i=0
 
         for (element in list1) {
             //  if (element != "" && element.length > 25) {
             if (element != "") {
+                i++
                 var list2 = element.split(GOD)
                 var st1 = improveString(list2[0])
                 var st2 = improveString(list2[1])
+                if (st1.isNullOrEmpty() || st2.isNullOrEmpty()){
+                    return talkList1
+                }
                 countItem++
-
                 talker = Talker()
                 with(talker) {
                     whoSpeake = "man"

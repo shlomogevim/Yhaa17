@@ -426,13 +426,14 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     private fun readAgainTextFile() {
         val textTalkList = sharData.createTalkListFromTheStart()
         talkList = activatApp.textReRead(talkList, textTalkList)
-        Handler().postDelayed(
-            {
+        /*Handler().postDelayed(
+            {*/
                 moveTheAnimation()
-            },
+                Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
+
+  /*          },
             2000 // value in milliseconds
-        )
-        Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
+        )*/
     }
 
     private fun selectColor() {

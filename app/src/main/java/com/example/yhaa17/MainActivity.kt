@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
             //  mainStartLayout.setOnClickListener {
             val intent=Intent(this,AnimationScreen::class.java)
             intent.putExtra(FILE_NUM,CURRENT_NUM)
@@ -39,6 +41,34 @@ class MainActivity : AppCompatActivity() {
         getStyleData()
         sendData()*/
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    /* private fun sendData() {
         val intent = Intent(this, AnimationScreen::class.java)
