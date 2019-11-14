@@ -540,6 +540,8 @@ object Utile {
                     .thenAnimate(arr[1])
                     .scale(0f, 1f)
                     .duration(dur)
+                    .thenAnimate(arr[1])
+                    .repeatMode(swingRepeat)
                     .swing()
                     .start()
             }
@@ -554,6 +556,8 @@ object Utile {
                     .thenAnimate(arr[2])
                     .scale(0f, 1f)
                     .duration(dur)
+                    .thenAnimate(arr[2])
+                    .repeatMode(swingRepeat)
                     .swing()
                     .start()
             }
@@ -571,6 +575,8 @@ object Utile {
                     .thenAnimate(arr[3])
                     .scale(0f, 1f)
                     .duration(dur)
+                    .thenAnimate(arr[3])
+                    .repeatMode(swingRepeat)
                     .swing()
                     .start()
             }
@@ -591,6 +597,8 @@ object Utile {
                     .thenAnimate(arr[4])
                     .scale(0f, 1f)
                     .duration(dur)
+                    .thenAnimate(arr[4])
+                    .repeatMode(swingRepeat)
                     .swing()
                     .start()
             }
