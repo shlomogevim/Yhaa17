@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         conversation ->
         operateConverastion(conversation)
 
-        Toast.makeText(this, "You press on Item no ${conversation.numC}", Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this, "You press on Item no ${conversation.numC}", Toast.LENGTH_SHORT).show()
     })
 }
 

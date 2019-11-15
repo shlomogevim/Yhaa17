@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,10 +18,30 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_animation_screen.*
 import kotlinx.android.synthetic.main.helper_view_layout.*
+import kotlinx.android.synthetic.main.helper_view_layout.action_ListView
+import kotlinx.android.synthetic.main.helper_view_layout.colorNam_ET
+import kotlinx.android.synthetic.main.helper_view_layout.displayAgainBtn
+import kotlinx.android.synthetic.main.helper_view_layout.lastTalker_button
+import kotlinx.android.synthetic.main.helper_view_layout.newPageBtn
+import kotlinx.android.synthetic.main.helper_view_layout.nextButton
+import kotlinx.android.synthetic.main.helper_view_layout.pageNumEditText
+import kotlinx.android.synthetic.main.helper_view_layout.para_ListView
+import kotlinx.android.synthetic.main.helper_view_layout.plusAndMinusBtn
+import kotlinx.android.synthetic.main.helper_view_layout.previousButton
+import kotlinx.android.synthetic.main.helper_view_layout.reSizeTextBtn
+import kotlinx.android.synthetic.main.helper_view_layout.saveButton
+import kotlinx.android.synthetic.main.helper_view_layout.style_ListView
+import kotlinx.android.synthetic.main.helper_view_layout.textRevBtn
+import kotlinx.android.synthetic.main.helper_view_layout.ttPara_listView
+import kotlinx.android.synthetic.main.helper_view_layout.tvAnimatinKind
+import kotlinx.android.synthetic.main.helper_view_layout.tvPage
+import kotlinx.android.synthetic.main.helpre_show_layout.*
 
 
 class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
+
+    val SHOW_POSITION = false // *************
 
     companion object {
         const val FILE_NUM = "file_num"
@@ -32,7 +51,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     lateinit var textTalkList: ArrayList<Talker>
     lateinit var spicalTalkList: ArrayList<Talker>
 
-    val SHOW_POSITION=true // *************
+
 
     var currentFileNum = 10
     var STORELIST = "storelist"
@@ -67,7 +86,13 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout.activity_animation_screen)
+
+        if (SHOW_POSITION) {
+            setContentView(layout.show_layout)
+        }else{
+            setContentView(layout.activity_animation_screen)
+        }
+
 
 
 
@@ -84,7 +109,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         animationMovmentListView()  // list view in the right side
 
         initButton()
-        lastTalker= Talker()
+        lastTalker = Talker()
         tranferTalkItem(0)
 
 
@@ -93,19 +118,21 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun tranferTalkItem(ind: Int) {
-      if (ind==0){
-          lastTalker=talkList[counterStep].copy()
-         /* lastTalker.swingRepeat=talkList[counterStep].swingRepeat
-          lastTalker.radius=talkList[counterStep].radius*/
-      }else{
-          talkList[counterStep]=lastTalker.copy()
-      }
-
+        if (ind == 0) {
+            lastTalker = talkList[counterStep].copy()
+            /* lastTalker.swingRepeat=talkList[counterStep].swingRepeat
+             lastTalker.radius=talkList[counterStep].radius*/
+        } else {
+            talkList[counterStep] = lastTalker.copy()
+        }
 
 
     }
 
     private fun moveTheAnimation() {
+        if (counterStep==84){
+            finish()
+        }
         updateTitleTalkerSituation()
         if (counterStep < 1) counterStep = 1
 
@@ -209,7 +236,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
             20 -> changeBackColor()
             21 -> changeBorderColor()
             22 -> changeBorderWidth(intv)
-            23 -> talkList[counterStep].borderWidth=0
+            23 -> talkList[counterStep].borderWidth = 0
             24 -> changeSwingRepeat(intv)
         }
         chkNewData()
@@ -403,7 +430,14 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         when (v.id) {
             id.textRevBtn -> readAgainTextFile()
             id.newPageBtn -> enterNewCounterStep()
-            id.plusAndMinusBtn -> changePlusMinusMode()
+            id.plusAndMinusBtn -> {
+                if (SHOW_POSITION){
+                    changePlusMinusMode()
+                }else{
+                    plusAndMinusBtn.text="Start"
+                    initIt()
+                }
+            }
             id.displayAgainBtn -> moveTheAnimation()
             id.saveButton -> saveIt()
             id.nextButton -> nextIt()
@@ -430,12 +464,12 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         talkList = activatApp.textReRead(talkList, textTalkList)
         /*Handler().postDelayed(
             {*/
-                moveTheAnimation()
-                Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
+        moveTheAnimation()
+        Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
 
-  /*          },
-            2000 // value in milliseconds
-        )*/
+        /*          },
+                  2000 // value in milliseconds
+              )*/
     }
 
     private fun selectColor() {
@@ -576,14 +610,12 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         editor = myPref.edit()
         counterStep = myPref.getInt(CURRENT_SPEAKER, 1)
         animationInAction1 = AnimationAction(this, mainLayout)
-        if (SHOW_POSITION){
+        if (SHOW_POSITION) {
             toTheShowMode()
         }
     }
 
     private fun toTheShowMode() {
-
-
 
 
     }
