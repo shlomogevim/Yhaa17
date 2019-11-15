@@ -32,6 +32,8 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     lateinit var textTalkList: ArrayList<Talker>
     lateinit var spicalTalkList: ArrayList<Talker>
 
+    val SHOW_POSITION=true // *************
+
     var currentFileNum = 10
     var STORELIST = "storelist"
 
@@ -574,8 +576,16 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         editor = myPref.edit()
         counterStep = myPref.getInt(CURRENT_SPEAKER, 1)
         animationInAction1 = AnimationAction(this, mainLayout)
-        //manipulateListView()
-        //createSpecialTalkList()
+        if (SHOW_POSITION){
+            toTheShowMode()
+        }
+    }
+
+    private fun toTheShowMode() {
+
+
+
+
     }
 
     private fun findStyleObject(index: Int): StyleObject {
