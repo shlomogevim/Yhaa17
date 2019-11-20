@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -75,6 +76,7 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     val CURRENT_SPEAKER = "stam_speaker"
     lateinit var myPref: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
+
     var styleList = arrayListOf<String>()
     var paraList = arrayListOf<String>()
     var ttParaList = arrayListOf<String>()
@@ -94,13 +96,16 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         }
 
 
-
-
         currentFileNum = intent.getIntExtra(FILE_NUM, 0)
         sharData = ShareData(this, currentFileNum)
         activatApp = ActivateApp(this)
-        talkList = sharData.getTalkingList(1)
-        // textTalkList = sharData.createTalkListFromTheStart()
+
+       // talkList = sharData.getTalkingList(1)
+        talkList = sharData.getTalkingListFromExternalStorage(1)
+
+
+      //  talkList = sharData.getTalkingListFromExternalStorage1(1)
+
 
         initValues()
         styleListView()   //list view in the left side
@@ -111,10 +116,17 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         initButton()
         lastTalker = Talker()
         tranferTalkItem(0)
-
-
+        backGroundConfigration()
 
         moveTheAnimation()     // Let's play
+    }
+
+    fun backGroundConfigration(){
+
+        val animationDrawable=imageView.background as? AnimationDrawable
+       /* animationDrawable?.setEnterFadeDuration(2000)
+        animationDrawable?.setExitFadeDuration(4000)*/
+        animationDrawable?.start()
     }
 
     private fun tranferTalkItem(ind: Int) {
@@ -130,8 +142,14 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun moveTheAnimation() {
-        if (counterStep==84){
+        if (counterStep>84) counterStep=84
+        if (counterStep==84 && SHOW_POSITION){
+
+            editor.putInt(CURRENT_SPEAKER, 1)
+            editor.commit()
             finish()
+        }else{
+
         }
         updateTitleTalkerSituation()
         if (counterStep < 1) counterStep = 1
@@ -432,10 +450,10 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
             id.newPageBtn -> enterNewCounterStep()
             id.plusAndMinusBtn -> {
                 if (SHOW_POSITION){
-                    changePlusMinusMode()
-                }else{
                     plusAndMinusBtn.text="Start"
                     initIt()
+                }else{
+                    changePlusMinusMode()
                 }
             }
             id.displayAgainBtn -> moveTheAnimation()
@@ -590,6 +608,9 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         previousButton.setOnClickListener { onClick(previousButton) }
         lastTalker_button.setOnClickListener { onClick(lastTalker_button) }
         reSizeTextBtn.setOnClickListener { onClick(reSizeTextBtn) }
+        if (SHOW_POSITION) {
+            plusAndMinusBtn.text="Start"
+        }
     }
 
 
@@ -681,7 +702,11 @@ class AnimationScreen : AppCompatActivity(), View.OnClickListener {
         editor.putInt(CURRENT_SPEAKER, counterStep)
         editor.commit()
         updateTitleTalkerSituation()
+
         sharData.saveData(talkList)
+       // sharData.saveDataToExternalStorage(talkList)
+        sharData.saveDataToExternalStorage1(talkList)
+
         Toast.makeText(this, "It's save Mr", Toast.LENGTH_SHORT).show()
     }
 
